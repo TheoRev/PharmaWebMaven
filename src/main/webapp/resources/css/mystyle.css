@@ -1,0 +1,66 @@
+.botones{
+    text-align: center;
+}
+
+icon{
+    text-align: center;
+}
+
+.status{
+    width: 64px;
+    height: 64px;
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+}
+
+.form-style{
+    font-size: 9pt;
+}
+
+.delete-button, .action-button{
+    text-align: right;
+}
+
+.panel-content{
+    font-size: 2pt;
+}
+
+.action_columns{
+    width: 105pt;
+}
+
+#actions-lab, #actions-stock{
+    text-align: center;
+}
+
+.cod_lab{
+    width: 70pt;
+    text-align: center;
+}
+
+.action_column, .cod_col{
+    text-align: center;
+}
+
+/*#bottom{
+    position: relative;
+    font-size: 10.5pt; text-align: justify;
+}*/
+
+#bottom{
+    font-size: 10.5pt; 
+    text-align: right;
+    position: absolute;
+    bottom: 5px;
+    margin-left: 775pt;
+    /*right: 10px;*/
+}
+
+.precios{
+    text-align:  right;
+}
+
+.cantidades{
+    text-align: center;
+}

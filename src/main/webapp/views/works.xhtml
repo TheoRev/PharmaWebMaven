@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <h:outputStylesheet library="css" name="login.css"/>
+    </h:head>
+
+    <h:body>
+        <h:form id="frmWorks">
+            <p:growl id="msgWorks" showDetail="true"/>
+            <p:dialog id="idDlgWorks"
+                      widgetVar="dlgWorks"
+                      closable="true"
+                      minimizable="true"
+                      resizable="false"
+                      showEffect="explode"
+                      hideEffect="explode"
+                      width="800"
+                      header="Historial de Actividades">
+                <p:panel id="pnlWorksFilters">
+                    <p:panelGrid columns="3">
+                        <p:calendar id="txtFechaWork" pattern="dd/MM/yyyy" navigator="true"
+                                    effect="fold" value="#{startWorkController.startWork.fecha}" 
+                                    validatorMessage="Este compo no debe estar vacio"
+                                    showOn="button"/>
+                        <p:selectOneMenu id="cbUsers" effect="fold"
+                                         converter="usersConverter"
+                                         value="#{startWorkController.startWork.userId}" var="us"
+                                         filter="true" filterMatchMode="startsWith">
+                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+                            <f:selectItems value="#{startWorkController.usuarios}" var="u"
+                                           itemLabel="#{u.username}" itemValue="#{u}"/>
+                            <p:column>
+                                <h:outputText value="#{us.username}"/>
+                            </p:column>
+                        </p:selectOneMenu>
+                        <p:commandButton title="Buscar"
+                                         icon="fa fa-search"
+                                         action="#{startWorkController.doFindBy()}"
+                                         update="pnlWorks"/>
+                    </p:panelGrid>
+                </p:panel>
+
+                <p:panel id="pnlWorks">                    
+                    <p:dataTable id="tblWorks"
+                                 rows="10" paginator="true"
+                                 value="#{startWorkController.startWorks}" var="ow"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" >
+                        <p:column headerText="Id">
+                            <h:outputText value="#{ow.id}"/>
+                        </p:column>
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{ow.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Monto">
+                            <h:outputText value="S/. #{ow.capital}"/>
+                        </p:column>
+                        <p:column headerText="Usuario">
+                            <h:outputText value="#{ow.userId.username}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>

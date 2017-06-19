@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <h:outputStylesheet library="css" name="mystyle.css" />
+    </h:head>
+    <h:body>
+        <h:form id="frmIngProd" styleClass="form-style">
+            <p:growl id="msgIngProd" showDetail="true" />
+            <p:dialog closable="true" widgetVar="dlgIngProd" id="idDlgIngProd"
+                      showEffect="explode" hideEffect="explode" width="750"
+                      minimizable="true" header="Productos Ingresados y/o Actualizados">
+                <p:outputLabel value="Fecha" />&nbsp;
+                <p:calendar pattern="dd/MM/yyyy" navigator="true"
+                            effect="fold"
+                            showOn="button"
+                            value="#{ingresoProdController.fecha}">
+                    <p:ajax event="dateSelect"
+                            listener="#{ingresoProdController.doFindIngresoBy()}"
+                            update=":frmIngProd:pnlIngProd"/>
+                </p:calendar>
+                &nbsp;
+                <p:commandButton value="Mostrar todo" 
+                                 action="#{ingresoProdController.doFindAllIngreso()}"
+                                 update=":frmIngProd:pnlIngProd"/>
+
+                <p:panel id="pnlIngProd" styleClass="panel-content">
+                    <p:dataTable id="tblIngProd" rows="10" paginator="true"
+                                 value="#{ingresoProdController.ingresoProductos}" var="ip"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" styleClass="panel-content">
+                        <p:column headerText="Código" styleClass="cod_lab"
+                                  sortBy="#{ip.codigo}">
+                            <h:outputText value="#{ip.codigo}" />
+                        </p:column>
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{ip.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Hora">
+                            <h:outputText value="#{ip.hora}">
+                                <f:convertDateTime pattern="HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{ip.cantidad}" />
+                        </p:column>
+                        <p:column headerText="Costo">
+                            <h:outputText value="#{ip.costo}" />
+                        </p:column>
+                        <p:column headerText="Nombre" style="width: 150pt;">
+                            <h:outputText value="#{ip.codStock.nombre}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+
+    </h:body>
+</html>

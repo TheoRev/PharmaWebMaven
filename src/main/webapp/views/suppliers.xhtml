@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <h:outputStylesheet library="css" name="mystyle.css"/>
+    </h:head>
+    <h:body>
+        <h:form id="frmSuppR" styleClass="form-style">
+            <p:growl id="msgSuppR" showDetail="true"/>
+            <p:dialog closable="true"
+                      widgetVar="dlgSuppR"
+                      id="idDlgSuppR"
+                      showEffect="explode"
+                      hideEffect="explode" width="1200"
+                      header="LISTA DE DISTRIBUIDORES">
+                
+                <p:panel id="pnlActions" styleClass="panel-content"
+                         style="height: 30pt;">
+                    <p:commandButton icon="fa fa-plus"
+                                     value="Add"
+                                     title="Añadir Laboratorio"
+                                     update=":frmSuppCU:idDlgSuppCU"
+                                     oncomplete="PF('dlgSuppCU').show()"
+                                     action="#{suppliersController.doNew()}"
+                                     style="float: left"/>
+                </p:panel>
+                <br/>
+                
+                <p:panel id="pnlSuppR" styleClass="panel-content" >
+                    <p:dataTable id="tblSuppR" rows="10" paginator="true"
+                                 value="#{suppliersController.supplierses}"
+                                 var="s"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" styleClass="panel-content">
+                        <p:column headerText="Código" styleClass="cod_lab"  width="50">
+                            <h:outputText value="#{s.codigo}"/>
+                        </p:column>
+                        <p:column headerText="Nombre" style="width: 150pt;">
+                            <h:outputText value="#{s.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Encargado" style="width: 150pt;">
+                            <h:outputText value="#{s.encargado}"/>
+                        </p:column>
+                        <p:column headerText="Teléfono/Cel." style="width: 150pt;">
+                            <h:outputText value="#{s.telefono}"/>
+                        </p:column>
+                        <p:column headerText="Email" style="width: 150pt;">
+                            <h:outputText value="#{s.email}"/>
+                        </p:column>
+                        <p:column headerText="" styleClass="action_columns">
+                            <div id="actions-lab">
+                                <p:commandButton icon="fa fa-pencil"
+                                                 update=":frmSuppCU:idDlgSuppCU"
+                                                 oncomplete="PF('dlgSuppCU').show()"
+                                                 title="Editar registro"
+                                                 action="#{suppliersController.doUpgrade(s)}">
+                                </p:commandButton>
+                                &nbsp;
+                                <p:commandButton icon="fa fa-trash"
+                                                 title="Eliminar registro"
+                                                 update=":frmDeleteSupp:idConfirmDeleteSupp"
+                                                 oncomplete="PF('dlgConfirmDeleteSupp').show()"
+                                                 action="#{suppliersController.doUpgrade(s)}"/>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </p:dialog>            
+        </h:form>
+
+        <h:form id="frmSuppCU" styleClass="form-style">
+            <p:dialog header="#{suppliersController.accion} PROVEEDOR"
+                      closable="true"
+                      widgetVar="dlgSuppCU"
+                      id="idDlgSuppCU"
+                      modal="true"
+                      showEffect="explode" hideEffect="explode">
+                <p:panelGrid id="pgSuppCU" columns="2">
+                    <p:outputLabel value="Código"/>
+                    <p:inputText value="#{suppliersController.suppliers.codigo}" disabled="true"/>
+                    <p:outputLabel for="txtNombre" value="Nombre"/>
+                    <p:inputText id="txtNombre" value="#{suppliersController.suppliers.nombre}" required="true"/>
+                    <p:outputLabel value="Encargado"/>
+                    <p:inputText value="#{suppliersController.suppliers.encargado}"/>
+                    <p:outputLabel for="txtTelefCel" value="Telef / Cel."/>
+                    <p:inputText id="txtTelefCel" value="#{suppliersController.suppliers.telefono}" required="true"/>
+                    <p:outputLabel value="Email"/>
+                    <p:inputText value="#{suppliersController.suppliers.email}"
+                                 placeholder="email@email.com">
+                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
+                    </p:inputText>
+
+                    <f:facet name="footer">
+                        <div class="action-button">
+                            <p:commandButton value="GUARDAR"
+                                             icon="fa fa-fw fa-floppy-o"
+                                             update=":frmSuppR:tblSuppR :frmSuppR:msgSuppR"
+                                             onclick="PF('dlgSuppCU').hiden()"
+                                             action="#{suppliersController.doExecute()}"
+                                             validateClient="true"/>
+                        </div>
+                    </f:facet>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="frmDeleteSupp" styleClass="form-style">
+            <p:confirmDialog id="idConfirmDeleteSupp"
+                             widgetVar="dlgConfirmDeleteSupp"
+                             showEffect="explode" hideEffect="explode"
+                             header="Eliminar Proveedor"
+                             message="¿Esta seguro que desea eliminar el laboratorio registrado como: #{suppliersController.suppliers.nombre}?">
+                <h:inputHidden value="#{suppliersController.suppliers.codigo}"/>
+                <div class="delete-button">
+                    <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
+                                     action="#{suppliersController.doDelete(suppliersController.suppliers)}"
+                                     update=":frmSuppR:idDlgSuppR :frmSuppR:msgSuppR"
+                                     oncomplete="PF('dlgConfirmDeleteSupp').hide();"/>
+                    <p:commandButton value="No" styleClass="ui-confirmdialog-no" icon="ui-icon-close" 
+                                     onclick="PF('dlgConfirmDeleteSupp').hide();"/>
+                </div>
+            </p:confirmDialog>
+        </h:form>
+    </h:body>
+</html>

@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../templates/template.xhtml">
+
+            <ui:define name="content">
+
+                <p:growl id="wellcomeMessage" showDetail="true" sticky="true"/>
+
+                <h:form id="frmPayResult">
+                    <p:growl id="showMessagePay" showDetail="true" />
+                    <p:panel id="pnlPayResult">
+                        <p:dataTable id="tblPayResult" rows="10" paginator="true"
+                                     value="#{paymentsController.paymentses}" var="p"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15" style="font-size: 9pt">
+                            <f:facet name="header">
+                                <p:outputLabel style="font-size: 15pt">
+                                    Listado de Pagos
+                                </p:outputLabel>
+                                <p:commandButton value="Agregar Pago"
+                                                 style="float: right; font-size: 10pt;"
+                                                 update=":frmPayCU:idDlgPayCU"
+                                                 oncomplete="PF('dlgPayCU').show()" icon="fa fa-plus"
+                                                 title="Añadir Venta" action="#{paymentsController.doNew()}" />
+                            </f:facet>
+
+                            <p:column headerText="Código" styleClass="cod_col"
+                                      sortBy="#{p.codigo}">
+                                <h:outputText value="#{p.codigo}" />
+                            </p:column>
+                            <p:column headerText="Fecha" sortBy="#{p.fecha}">
+                                <h:outputText value="#{p.fecha}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Monto">
+                                <h:outputText value="#{p.monto}" >
+                                    <f:convertNumber currencySymbol="S/." type="currency" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Descripción">
+                                <h:outputText value="#{p.descripcion}"/>
+                            </p:column>
+                            <p:column headerText="Usuario">
+                                <h:outputText value="#{p.userId.username}" />
+                            </p:column>
+                            <p:column headerText="Producto">
+                                <h:outputText value="#{p.codStock.nombre}"/>
+                            </p:column>
+                            <p:column headerText="">
+                                <div class="action_column">
+                                    <p:commandButton icon="fa fa-pencil"
+                                                     update=":frmPayCU:idDlgPayCU"
+                                                     oncomplete="PF('dlgPayCU').show()" title="Editar registro"
+                                                     action="#{paymentsController.doUpgrade(p)}" />
+                                    &nbsp;
+                                    <p:commandButton icon="fa fa-trash" title="Eliminar registro"
+                                                     update=":frmDeletePay:idConfirmDeletePay"
+                                                     oncomplete="PF('dlgConfirmDeletePay').show()"
+                                                     action="#{paymentsController.doUpgrade(p)}" />
+                                </div>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+
+                <h:form id="frmPayCU">
+                    <p:dialog id="idDlgPayCU" header="#{paymentsController.accion} PAGO"
+                              closable="true" widgetVar="dlgPayCU" showEffect="explode"
+                              hideEffect="explode" modal="true"
+                              resizable="false">
+                        <p:panelGrid id="pgSaleCU" columns="2">
+                            <p:outputLabel value="Monto actual en Caja"/>
+                            <p:outputLabel value="#{paymentsController.startWork.capital}"/>
+                            <p:outputLabel value="Código" />
+                            <p:inputText value="#{paymentsController.payments.codigo}"
+                                         disabled="true" />
+                            <p:outputLabel value="Usuario" />
+                            <p:inputText id="txtUsuario"
+                                         value="#{paymentsController.payments.userId.username}" disabled="true" />
+                            <p:outputLabel for="txtFecSup" value="Fecha" />
+                            <p:calendar id="txtFecSup" value="#{paymentsController.payments.fecha}" navigator="true"
+                                        pattern="dd/MM/yyyy" effect="fold" 
+                                        showOn="button" required="true"/>
+                            <p:outputLabel value="Laboratorio"/>
+                            <p:selectOneMenu id="labs" effect="fold"
+                                             converter="labConverter"
+                                             value="#{paymentsController.laboratory}"
+                                             var="l"
+                                             filter="true" filterMatchMode="startsWith">
+                                <f:selectItem itemLabel="Seleccione" itemValue="-1"/>
+                                <f:selectItems value="#{paymentsController.laboratorys}" var="la"
+                                               itemLabel="#{la.nomLab}"
+                                               itemValue="#{la}"/>
+                                <p:ajax event="change" 
+                                        listener="#{paymentsController.doGetProductos()}"
+                                        update="somProducto"/>
+                                <p:column>
+                                    <h:outputText value="#{l.codLab}"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{l.nomLab}"/>
+                                </p:column>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Producto"/>
+                            <p:selectOneMenu id="somProducto" effect="fold"
+                                             converter="stockConverter"
+                                             value="#{paymentsController.payments.codStock}"
+                                             var="sp"
+                                             filter="true" filterMatchMode="startsWith">
+                                <f:selectItem itemLabel="Seleccione" itemValue="-1"/>
+                                <f:selectItems value="#{paymentsController.productos}" var="l"
+                                               itemLabel="#{l.nombre}"
+                                               itemValue="#{l}"/>
+                                <p:column>
+                                    <h:outputText value="#{sp.codStock}"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{sp.nombre}"/>
+                                </p:column>
+                            </p:selectOneMenu> 
+                            <p:outputLabel for="txtMonto" value="Monto" />
+                            <p:inputNumber id="txtMonto"  value="#{paymentsController.payments.monto}" symbol="S/. " emptyValue="0.00"/>
+                            <p:outputLabel value="Descripción" />
+                            <p:inputTextarea value="#{paymentsController.payments.descripcion}" rows="6" cols="33"/>
+                            <p:outputLabel />                       
+
+
+                            <f:facet name="footer">
+                                <div class="action-button">
+                                    <p:commandButton value="GUARDAR" icon="fa fa-fw fa-floppy-o"
+                                                     update=":frmPayResult:pnlPayResult :frmPayResult:showMessagePay"
+                                                     title="Guardar/Actualizar" onclick="PF('dlgPayCU').hide()"
+                                                     action="#{paymentsController.doExecute()}" />
+                                </div>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmDeletePay" styleClass="form-style">
+                    <p:confirmDialog id="idConfirmDeletePay"
+                                     widgetVar="dlgConfirmDeletePay" showEffect="explode"
+                                     hideEffect="explode" header="Eliminar Laboratorio"
+                                     message="¿Esta seguro que desea eliminar la venta registrado como: #{paymentsController.payments.descripcion} y con Código = #{paymentsController.payments.codigo}?">
+                        <h:inputHidden value="#{paymentsController.payments.codigo}" />
+                        <div class="delete-button">
+                            <p:commandButton value="Si" styleClass="ui-confirmdialog-yes"
+                                             icon="ui-icon-check"
+                                             action="#{paymentsController.doDelete(paymentsController.payments)}"
+                                             update=":frmPayResult:pnlPayResult :frmPayResult:showMessagePay"
+                                             oncomplete="PF('dlgConfirmDeletePay').hide();" />
+                            <p:commandButton value="No" styleClass="ui-confirmdialog-no"
+                                             icon="ui-icon-close" onclick="PF('dlgConfirmDeletePay').hide();" />
+                        </div>
+                    </p:confirmDialog>
+                </h:form>
+
+
+            </ui:define>            
+
+        </ui:composition>
+    </body>
+</html>

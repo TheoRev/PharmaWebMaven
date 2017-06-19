@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../templates/template_work.xhtml">
+
+            <ui:define name="content">
+                <h:form id="frmOpenWork">
+                    <div id="openWork">
+                        <p:panel header="INICIANDO ACTIVIDAD">
+                            <f:facet name="header">
+                                <p:outputLabel value="INICIANDO ACTIVIDAD"
+                                               style="text-align: center;"/>
+                                <p:commandButton value="Historial"
+                                                 style="float: right;"
+                                                 icon="fa fa-fw fa-eye"
+                                                 update=":frmWorks:idDlgWorks"
+                                                 oncomplete="PF('dlgWorks').show()"
+                                                 action="#{startWorkController.doFindAll()}"/>
+                            </f:facet>
+
+                            <p:growl id="grOpenWork" showDetail="true" sticky="true"/>
+                            <p:panelGrid id="pnlOpenWork"
+                                         columns="2">
+                                <p:outputLabel value="Fecha"/>
+                                <p:calendar value="#{usersController.startWork.fecha}" navigator="true"
+                                            pattern="dd/MM/yyyy" effect="fold" 
+                                            showOn="button"/>
+                                <p:outputLabel value="Monto en caja"/>
+                                <p:inputNumber id="txtMontoCaja" value="#{usersController.startWork.capital}" symbol="S/. "
+                                               emptyValue="0.00"/>
+
+                                <f:facet name="footer">
+                                    <p:commandButton 
+                                        value="GUARDAR"
+                                        icon="fa fa-floppy-o"
+                                        action="#{usersController.doCreate(usersController.usuario)}"
+                                        style="float: right;"/>
+                                </f:facet>
+                            </p:panelGrid>
+                        </p:panel>            
+                    </div>      
+                </h:form>
+
+                <ui:include src="works.xhtml"/>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>FarmaSur - System</title>
+        <h:outputStylesheet library="css" name="login.css" />
+        <link rel="shortcut icon" href="resources/images/PharmaSystemWeb_2.ico"/>
+    </h:head>
+    <h:body>
+        <div id="Login">
+            <h:form id="frmValidacion">
+                <p:growl id="grValidacion" showDetail="true" sticky="true"/>
+                <p:panel header="Ingreso al Sistema">
+                    <p:panelGrid columns="2" columnClasses="no-border, no-border, no-border">                        
+                        <p:outputLabel for="txtUser" value="Usuario"/>
+                        <p:inputText id="txtUser" value="#{usersController.usuario.username}" required="true"/>
+                        <p:outputLabel for="txtPass" value="Password"/>
+                        <p:password id="txtPass" value="#{usersController.usuario.password}" required="true"/>
+                        <br/>
+                        <f:facet name="footer">
+                            <div align="right">
+                                <p:commandButton value="Ingresar" icon="fa fa-sign-in"
+                                                 action="#{usersController.logear()}"
+                                                 ajax="false"
+                                                 validateClient="true"
+                                                 update="grValidacion"/>
+                            </div>
+                        </f:facet>
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+        </div>
+
+        <ui:insert name="status">
+            <p:ajaxStatus styleClass="status">
+                <f:facet name="start">
+                    <p:graphicImage value="/resources/images/loader.gif"/>
+                </f:facet>
+                <f:facet name="complete">
+                    <h:outputText value=""/>
+                </f:facet>
+            </p:ajaxStatus>
+        </ui:insert>
+    </h:body>
+</html>

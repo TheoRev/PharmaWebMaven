@@ -1,0 +1,23 @@
+.status{
+    width: 64px;
+    height: 64px;
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+}
+
+#Login{
+    width: 400px;
+    margin: 10px auto;
+    padding: 150px;
+}
+
+#openWork{
+    width: 500px;
+    margin: 10px auto;
+    padding: 25px;
+}
+
+.no-border {
+    border-style: hidden !important ;                                                                                                                                                                                                                                                                                                                              
+}

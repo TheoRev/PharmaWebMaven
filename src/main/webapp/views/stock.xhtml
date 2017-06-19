@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../templates/template.xhtml">
+
+            <ui:define name="content">
+
+                <h:form id="frmStockResult">
+                    <p:growl id="showMessage" showDetail="true" />
+                    <p:panel id="pnlStockResult" styleClass="panel-content">
+                        <p:dataTable id="tblStockResult" rows="10" paginator="true"
+                                     value="#{stockController.stockProductos}" var="sp"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15" style="font-size: 8pt">
+                            <f:facet name="header">
+                                <p:outputLabel style="font-size: 15pt">
+                                    Listado de Productos en Stock
+                                </p:outputLabel>
+                                <p:commandButton value="Agregar producto"
+                                                 style="float: right; font-size: 10pt;"
+                                                 update=":frmStock:idDlgStockUC"
+                                                 oncomplete="PF('dlgStockCU').show()" icon="fa fa-plus"
+                                                 title="Añadir" action="#{stockController.doNew()}" />
+                                
+                                 <p:commandButton value="Ingreso de Productos"
+                                             style="float: left; font-size: 10pt;"
+                                             icon="fa fa-product-hunt"
+                                             update=":frmIngProd:pnlIngProd"
+                                             oncomplete="PF('dlgIngProd').show()"/>
+                            </f:facet>
+
+                            <p:column headerText="Código" styleClass="cod_col"
+                                      sortBy="#{sp.codStock}"
+                                      style="#{stockController.colorearFila(sp.cantidad)}">
+                                <h:outputText value="#{sp.codStock}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{sp.nombre}"
+                                      style="#{stockController.colorearFila(sp.cantidad)}">
+                                <h:outputText value="#{sp.nombre}" />
+                            </p:column>
+                            <p:column headerText="Presentación"
+                                      style="#{stockController.colorearFila(sp.cantidad)}">
+                                <h:outputText value="#{sp.presentacion}" />
+                            </p:column>
+                            <p:column headerText="Laboratorio" filterBy="#{sp.codLab.nomLab}" sortBy="#{sp.codLab.nomLab}"
+                                      style="#{stockController.colorearFila(sp.cantidad)}">
+                                <h:outputText value="#{sp.codLab.nomLab}" />
+                            </p:column>
+                            <p:column headerText="Lote"
+                                      style="#{stockController.colorearFila(sp.cantidad)}">
+                                <h:outputText value="#{sp.lote}" />
+                            </p:column>
+                            <p:column headerText="Precio"
+                                      style="#{stockController.colorearFila(sp.cantidad)}">
+                                <h:outputText value="#{sp.monto}">
+                                    <f:convertNumber currencySymbol="S/." type="currency" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Cantidad"
+                                      style="#{stockController.colorearFila(sp.cantidad)}">
+                                <h:outputText value="#{sp.cantidad}" />
+                            </p:column>
+                            <p:column headerText=""
+                                      style="#{stockController.colorearFila(sp.cantidad)}">
+                                <div id="actions-stock">
+                                    <p:commandButton icon="fa fa-pencil"
+                                                     update=":frmStock:idDlgStockUC"
+                                                     oncomplete="PF('dlgStockCU').show()" title="Editar registro"
+                                                     action="#{stockController.doUpgrade(sp)}">
+                                    </p:commandButton>
+                                    &nbsp;
+                                    <p:commandButton icon="fa fa-trash" title="Eliminar registro"
+                                                     update=":frmDeletStock:idConfirmDeleteStock"
+                                                     oncomplete="PF('dlgConfirmDeleteStock').show()"
+                                                     action="#{stockController.doUpgrade(sp)}" />
+                                </div>
+                            </p:column>
+
+                            <!--<f:facet name="footer">
+                           <p:commandButton value="Ingreso de Productos"
+                                            style="float: left;"
+                                            icon="fa fa-product-hunt"
+                                            update=":frmIngProd:pnlIngProd"
+                                            oncomplete="PF('dlgIngProd').show()"/>
+                       </f:facet>-->
+                        </p:dataTable>                       
+                    </p:panel>
+                </h:form>
+
+                <h:form id="frmStock">
+                    <p:messages id="msgValidacion" autoUpdate="false" />
+                    <p:dialog header="#{stockController.accion} FARMACO" closable="true"
+                              widgetVar="dlgStockCU" modal="true" id="idDlgStockUC"
+                              showEffect="explode" hideEffect="explode">
+                        <p:panelGrid columns="3" id="pgStockCU">
+                            <p:outputLabel value="Código" />
+                            <p:inputText id="cod" disabled="true"
+                                         value="#{stockController.stockProducto.codStock}" />
+                            <p:outputLabel />
+                            <p:outputLabel value="Nombre" />
+                            <p:inputText id="nom"
+                                         value="#{stockController.stockProducto.nombre}" />
+                            <p:outputLabel />
+                            <p:outputLabel value="Presentación" />
+                            <p:inputText id="pres"
+                                         value="#{stockController.stockProducto.presentacion}" />
+                            <p:outputLabel />
+                            <p:outputLabel value="Laboratorio" />
+                            <p:selectOneMenu id="lab" effect="fold" converter="labConverter"
+                                             value="#{stockController.stockProducto.codLab}" var="lab"
+                                             filter="true" filterMatchMode="startsWith" style="width: 120px;">
+                                <f:selectItems value="#{stockController.labs}" var="labo"
+                                               itemLabel="#{labo.nomLab}" itemValue="#{labo}" />
+                                <p:column style="width: 10%">
+                                    <h:outputText value="#{lab.codLab}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{lab.nomLab}" />
+                                </p:column>
+                            </p:selectOneMenu>
+                            <p:commandButton icon="fa fa-flask" title="Gestionar Laboratorio"
+                                             update=":frmLabsR:pnlLabR" oncomplete="PF('dlgLabR').show()" />
+                            <p:outputLabel value="Lote" />
+                            <p:inputText id="lote"
+                                         value="#{stockController.stockProducto.lote}" />
+                            <p:outputLabel />
+                            <p:outputLabel value="Precio" />
+                            <p:inputNumber id="monto"
+                                           value="#{stockController.stockProducto.monto}" />
+                            <p:outputLabel />
+                            <p:outputLabel value="Cantidad" />
+                            <p:spinner id="cant" min="1"
+                                       value="#{stockController.stockProducto.cantidad}" />
+                            <p:outputLabel />
+
+                            <f:facet name="footer">
+                                <div style="text-align: right;">
+                                    <p:commandButton id="save" value="GUARDAR"
+                                                     icon="fa fa-fw fa-floppy-o"
+                                                     update=":frmStockResult:pnlStockResult :frmStockResult:showMessage, pgStockCU :frmIngProd:pnlIngProd"
+                                                     title="Guardar/Actualizar" onclick="PF('dlgStockCU').hide();"
+                                                     action="#{stockController.doExecute()}" />
+                                </div>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmDeletStock" styleClass="form-style">
+                    <p:confirmDialog id="idConfirmDeleteStock"
+                                     widgetVar="dlgConfirmDeleteStock" showEffect="explode"
+                                     hideEffect="explode" header="Eliminar Laboratorio"
+                                     message="¿Esta seguro que desea eliminar el laboratorio registrado como: #{stockController.stockProducto.nombre}?">
+                        <h:inputHidden value="#{stockController.stockProducto.codStock}" />
+                        <div class="delete-button">
+                            <p:commandButton value="Si" styleClass="ui-confirmdialog-yes"
+                                             icon="ui-icon-check"
+                                             action="#{stockController.doDelete(stockController.stockProducto)}"
+                                             update=":frmStockResult:pnlStockResult :frmStockResult:showMessage"
+                                             oncomplete="PF('dlgConfirmDeleteStock').hide();" />
+                            <p:commandButton value="No" styleClass="ui-confirmdialog-no"
+                                             icon="ui-icon-close"
+                                             onclick="PF('dlgConfirmDeleteStock').hide();" />
+                        </div>
+                    </p:confirmDialog>
+                </h:form>
+
+                <ui:include src="laboratorio.xhtml" />
+                <ui:include src="ingresoprod.xhtml" />
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

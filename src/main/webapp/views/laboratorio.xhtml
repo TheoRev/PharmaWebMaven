@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <h:outputStylesheet library="css" name="mystyle.css"/>
+    </h:head>
+    <h:body>
+        <h:form id="frmLabsR" styleClass="form-style">
+            <p:growl id="msgLabR" showDetail="true"/>
+            <p:dialog closable="true"
+                      widgetVar="dlgLabR"
+                      id="idDlgLabR"
+                      showEffect="explode"
+                      hideEffect="explode" width="750">
+                <p:panel id="pnlLabR" styleClass="panel-content" >
+                    <p:dataTable id="tblLabR" rows="10" paginator="true"
+                                    value="#{laboratoryController.laboratorios}"
+                                 var="lb"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" styleClass="panel-content">
+                        <f:facet name="header">
+                            <p:outputLabel>
+                                LISTA DE LABORATORIOS
+                            </p:outputLabel>
+                            <p:commandButton icon="fa fa-plus"
+                                             value="Add"
+                                             title="Añadir Laboratorio"
+                                             update=":frmLabCU:idDlgLabCU"
+                                             oncomplete="PF('dlgLabCU').show()"
+                                             action="#{laboratoryController.doNew()}"
+                                             style="float: right"/>
+                        </f:facet>
+
+                        <p:column headerText="Código" styleClass="cod_lab" sortBy="#{lb.codLab}">
+                            <h:outputText value="#{lb.codLab}"/>
+                        </p:column>
+                        <p:column headerText="Razon Social" style="width: 150pt;">
+                            <h:outputText value="#{lb.nomLab}"/>
+                        </p:column>
+                        <p:column headerText="Distribuidor" sortBy="#{lb.codSupplier.nombre}">
+                            <h:outputText value="#{lb.codSupplier.nombre}"/>
+                        </p:column>
+                        <p:column headerText="" styleClass="action_columns">
+                            <div id="actions-lab">
+                                <p:commandButton icon="fa fa-pencil"
+                                             update=":frmLabCU:idDlgLabCU"
+                                             oncomplete="PF('dlgLabCU').show()"
+                                             title="Editar registro"
+                                             action="#{laboratoryController.doUpgrade(lb)}">
+                                <!--<f:setPropertyActionListener value="#{lb}"
+                                                             target=""/>-->
+                            </p:commandButton>
+                                &nbsp;
+                            <p:commandButton icon="fa fa-trash"
+                                             title="Eliminar registro"
+                                             update=":frmDeletLab:idConfirmDeleteLab"
+                                             oncomplete="PF('dlgConfirmDeleteLab').show()"
+                                             action="#{laboratoryController.doUpgrade(lb)}"/>
+                            </div>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </p:dialog>            
+    </h:form>
+
+    <h:form id="frmLabCU" styleClass="form-style">
+        <p:dialog header=" LABORATORIO"
+                  closable="true"
+                  widgetVar="dlgLabCU"
+                  id="idDlgLabCU"
+                  modal="true"
+                  showEffect="explode" hideEffect="explode">
+            <p:panelGrid id="pgLabCU" columns="2">
+                <p:outputLabel value="Código"/>
+                <p:inputText value="#{laboratoryController.laboratorio.codLab}" disabled="true"/>
+                <p:outputLabel for="txtNomLab" value="Nombre"/>
+                <p:inputText id="txtNomLab" value="#{laboratoryController.laboratorio.nomLab}" required="true"/>
+                <p:outputLabel value="Distribuidor"/>
+                <p:selectOneMenu id="smSupplier" effect="fold"
+                                 converter="labConverter"
+                                 value="#{laboratoryController.laboratorio.codSupplier}" var="labo"
+                                 filter="true" filterMatchMode="startsWith">
+                    <f:selectItem itemLabel="Seleccione" itemValue="-1"/>
+                    <f:selectItems value="#{laboratoryController.supplierses}" var="s"
+                                   itemLabel="#{s.nombre}" itemValue="#{s}"/>
+                    <p:column>
+                        <h:outputText value="#{labo.codigo}"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{labo.nombre}"/>
+                    </p:column>
+                </p:selectOneMenu>
+                <f:facet name="footer">
+                    <div class="action-button">
+                        <p:commandButton value="GUARDAR"
+                                         icon="fa fa-fw fa-floppy-o"
+                                         update=":frmLabsR:pnlLabR :frmLabsR:msgLabR"
+                                         onclick="PF('dlgLabCU').hiden()"
+                                         action="#{laboratoryController.doExecute()}"/>
+                    </div>
+                </f:facet>
+            </p:panelGrid>
+        </p:dialog>
+    </h:form>
+
+    <h:form id="frmDeletLab" styleClass="form-style">
+        <p:confirmDialog id="idConfirmDeleteLab"
+                         widgetVar="dlgConfirmDeleteLab"
+                         showEffect="explode" hideEffect="explode"
+                         header="Eliminar Laboratorio"
+                         message="¿Esta seguro que desea eliminar el laboratorio registrado como: #{laboratoryController.laboratorio.nomLab}?">
+            <h:inputHidden value="#{laboratoryController.laboratorio.codLab}"/>
+            <div class="delete-button">
+                <p:commandButton value="Si" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
+                                 action="#{laboratoryController.doDelete(laboratoryController.laboratorio)}"
+                                 update=":frmLabsR:idDlgLabR :frmLabsR:msgLabR"
+                                 oncomplete="PF('dlgConfirmDeleteLab').hide();"/>
+                <p:commandButton value="No" styleClass="ui-confirmdialog-no" icon="ui-icon-close" 
+                                 onclick="PF('dlgConfirmDeleteLab').hide();"/>
+            </div>
+        </p:confirmDialog>
+    </h:form>
+</h:body>
+</html>

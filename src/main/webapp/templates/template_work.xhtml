@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>FarmaSur - System</title>
+        <h:outputStylesheet library="css" name="mystyle.css"/>
+        <link rel="shortcut icon" href="../resources/images/PharmaSystemWeb_1.ico"/>
+        <f:event  type="preRenderView" listener="#{templateController.verificarSesion()}"/>
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top">
+                <ui:include src="menu_work.xhtml"/>
+            </ui:insert>
+        </div>
+
+        <div id="content" class="center_content">
+            <ui:insert name="content">Content</ui:insert>
+        </div>
+
+        <div id="bottom">
+            <ui:insert name="bottom">
+                <hr/>
+                <div id="content_bottom">
+                    PharmaWeb Project - &copy; Hector R. Revilla Fernández
+                </div>
+            </ui:insert>
+        </div>
+
+        <ui:insert name="status">
+            <p:ajaxStatus styleClass="status">
+                <f:facet name="start">
+                    <p:graphicImage value="/resources/images/loader.gif"/>
+                </f:facet>
+                <f:facet name="complete">
+                    <h:outputText value=""/>
+                </f:facet>
+            </p:ajaxStatus>
+        </ui:insert>
+
+        <h:outputScript library="js" name="spanishLocale.js"/>
+
+    </h:body>
+
+</html>

@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../templates/template.xhtml">
+
+            <ui:define name="content">
+                <h:form id="frmFiltroSale">
+                    <p:growl id="wellcomeMessage" showDetail="true" />
+                    <br />
+                    <p:panel id="pnlBusqueda" style="font-size: 10pt;">
+                        <p:outputLabel for="txtFechaSale" value="Fecha:" />&nbsp;
+                        <p:calendar id="txtFechaSale" pattern="dd/MM/yyyy" navigator="true"
+                                    effect="fold" value="#{saleController.fecha}" 
+                                    validatorMessage="Este compo no debe estar vacio"
+                                    showOn="button">
+                            <p:ajax event="dateSelect"
+                                    listener="#{saleController.doFindByFecha()}"
+                                    update=":frmSaleResult:pnlSaleResult" />
+                        </p:calendar>
+                        &nbsp;
+                        <p:commandButton icon="fa fa-search"
+                                         value="Mostrar todo"
+                                         action="#{saleController.doFindAll()}"
+                                         update=":frmSaleResult:pnlSaleResult wellcomeMessage" />
+                    </p:panel>
+                    <br />
+                </h:form>
+
+                <h:form id="frmSaleResult">
+                    <p:growl id="showMessage" showDetail="true" />
+                    <p:panel id="pnlSaleResult" style="font-size: 10pt;">
+                        <p:dataTable id="tblSaleResult" rows="6" paginator="true"
+                                     value="#{saleController.sales}" var="sp"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport} {Exporters}"
+                                     rowsPerPageTemplate="5,10,15" style="font-size: 9pt"
+                                     sortBy="#{sp.fecha}"
+                                     expandableRowGroups="true">
+                            <f:facet name="header">
+                                <p:outputLabel style="font-size: 12pt">
+                                    Listado de Venta
+                                </p:outputLabel>
+                                <p:commandButton value="Nueva Venta"
+                                                 style="float: right; font-size: 10pt;"
+                                                 update=":frmSaleCU:idDlgSaleCU"
+                                                 oncomplete="PF('dlgSaleCU').show()" icon="fa fa-plus"
+                                                 title="Añadir Venta" action="#{saleController.doNew()}" />
+                            </f:facet>
+
+                            <f:facet name="{Exporters}">
+                                <h:commandLink title="Exporatar a PDF">
+                                    <p:graphicImage name="/images/pdf.png" width="24"/>
+                                    <p:dataExporter type="pdf" target="tblSaleResult" fileName="ventas"/>
+                                </h:commandLink>
+                            </f:facet>
+
+                            <p:headerRow>
+                                <p:column>
+                                    <h:outputText value="#{sp.fecha}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column/>
+                                <p:column/>
+                                <p:column/>
+                                <p:column/>
+                                <p:column/>
+                                <p:column/>
+                                <p:column/>
+                                <p:column/>
+                            </p:headerRow>
+
+                            <p:column headerText="Código" styleClass="cod_col"
+                                      sortBy="#{sp.codSale}">
+                                <h:outputText value="#{sp.codSale}" />
+                            </p:column>
+                            <p:column headerText="Producto" sortBy="#{sp.codStock.nombre}">
+                                <h:outputText value="#{sp.codStock.nombre}" />
+                            </p:column>
+                            <p:column headerText="Fecha" sortBy="#{sp.fecha}">
+                                <h:outputText value="#{sp.fecha}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Hora">
+                                <h:outputText value="#{sp.hora}">
+                                    <f:convertDateTime pattern="hh:mm:ss"
+                                                       timeZone="#{saleController.timeZone}" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Cantidad" styleClass="cantidades">
+                                <h:outputText value="#{sp.cantidad}" />
+                            </p:column>
+                            <p:column headerText="Precio Unit." styleClass="precios">
+                                <h:outputText value="#{sp.codStock.monto}">
+                                    <f:convertNumber currencySymbol="S/." type="currency" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Subtotal" styleClass="precios">
+                                <h:outputText value="#{sp.subtotal}">
+                                    <f:convertNumber currencySymbol="S/." type="currency" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Usuario">
+                                <h:outputText value="#{sp.userId.username}"/>
+                            </p:column>
+                            <p:column headerText="" exportable="false">
+                                <div class="action_column">
+                                    <p:commandButton icon="fa fa-pencil"
+                                                     update=":frmSaleCU:idDlgSaleCU"
+                                                     oncomplete="PF('dlgSaleCU').show()" title="Editar registro"
+                                                     action="#{saleController.doUpgrade(sp)}" />
+                                    &nbsp;
+                                    <p:commandButton icon="fa fa-trash" title="Eliminar registro"
+                                                     update=":frmDeletSale:idConfirmDeleteSale"
+                                                     oncomplete="PF('dlgConfirmDeleteSale').show()"
+                                                     action="#{saleController.doUpgrade(sp)}" />
+                                </div>
+                            </p:column>
+
+                            <p:summaryRow >
+                                <p:column/>
+                                <p:column/>
+                                <p:column/>
+                                <p:column/>
+                                <p:column/>
+                                <p:column>
+                                    <h:outputText value="Total:"/>
+                                </p:column>
+                                <p:column exportable="true">
+                                    <h:outputText value="#{saleController.doGetTotal(sp.fecha)}">
+                                        <f:convertNumber type="currency" currencySymbol="S/. "/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column/>
+                                <p:column/>
+                            </p:summaryRow>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+
+                <h:form id="frmSaleCU">
+                    <p:dialog id="idDlgSaleCU" header="#{saleController.accion} VENTA"
+                              closable="true" widgetVar="dlgSaleCU" showEffect="explode"
+                              hideEffect="explode" modal="true">
+                        <p:panelGrid id="pgSaleCU" columns="2">
+                            <p:outputLabel value="Código" />
+                            <p:inputText value="#{saleController.sale.codSale}"
+                                         disabled="true" />
+                            <p:outputLabel value="Fecha" />
+                            <p:calendar value="#{saleController.sale.fecha}" navigator="true"
+                                        pattern="dd/MM/yyyy" effect="fold" 
+                                        showOn="button"/>
+                            <p:outputLabel value="Producto" />
+                            <p:selectOneMenu id="smProducto" effect="fold"
+                                             converter="stockConverter"
+                                             value="#{saleController.tempSale.codStock}" var="stock"
+                                             filter="true" filterMatchMode="startsWith"
+                                             disabled="#{saleController.estado}">
+                                <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+                                <f:selectItems value="#{saleController.stocks}" var="s"
+                                               itemLabel="#{s.nombre}" itemValue="#{s}" />
+                                <p:ajax event="change"
+                                        listener="#{saleController.doFindStockByCod()}"
+                                        update="txtPrecio" />
+                                <p:column>
+                                    <h:outputText value="#{stock.codStock}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{stock.nombre}" />
+                                </p:column>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Cantidad" />
+                            <p:inputText id="cant" value="#{saleController.sale.cantidad}">
+                                <p:ajax event="keyup" update="txtSubTotal"
+                                        listener="#{saleController.calcSubtotal()}" />
+                            </p:inputText>
+                            <p:outputLabel value="Precio" />
+                            <p:inputNumber id="txtPrecio"
+                                           value="#{saleController.producto.monto}" disabled="true" />
+                            <p:outputLabel value="Subtotal" />
+                            <p:inputNumber id="txtSubTotal"
+                                           value="#{saleController.sale.subtotal}" disabled="true" />
+
+                            <f:facet name="footer">
+                                <div class="action-button">
+                                    <p:commandButton value="GUARDAR" icon="fa fa-fw fa-floppy-o"
+                                                     update=":frmSaleResult:pnlSaleResult :frmSaleResult:showMessage"
+                                                     title="Guardar/Actualizar" onclick="PF('dlgSaleCU').hide()"
+                                                     action="#{saleController.doExecute()}" />
+                                </div>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmDeletSale" styleClass="form-style">
+                    <p:confirmDialog id="idConfirmDeleteSale"
+                                     widgetVar="dlgConfirmDeleteSale" showEffect="explode"
+                                     hideEffect="explode" header="Eliminar Laboratorio"
+                                     message="¿Esta seguro que desea eliminar la venta registrado como: #{saleController.sale.codStock.nombre}?">
+                        <h:inputHidden value="#{saleController.sale.codSale}" />
+                        <div class="delete-button">
+                            <p:commandButton value="Si" styleClass="ui-confirmdialog-yes"
+                                             icon="ui-icon-check"
+                                             action="#{saleController.doDelete(saleController.sale)}"
+                                             update=":frmSaleResult:pnlSaleResult :frmSaleResult:showMessage"
+                                             oncomplete="PF('dlgConfirmDeleteSale').hide();" />
+                            <p:commandButton value="No" styleClass="ui-confirmdialog-no"
+                                             icon="ui-icon-close" onclick="PF('dlgConfirmDeleteSale').hide();" />
+                        </div>
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
