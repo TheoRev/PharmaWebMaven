@@ -56,7 +56,7 @@
                             <f:facet name="{Exporters}">
                                 <h:commandLink title="Exporatar a PDF">
                                     <p:graphicImage name="/images/pdf.png" width="24"/>
-                                    <p:dataExporter type="pdf" target="tblSaleResult" fileName="ventas"/>
+                                    <p:dataExporter type="pdf" target="tblSaleResult" fileName="ventas" preProcessor="#{saleController.preProcessPDF}"/>
                                 </h:commandLink>
                             </f:facet>
 

@@ -10,6 +10,13 @@ import com.hrevfdz.services.IPharmacy;
 import com.hrevfdz.util.AccionUtil;
 import com.hrevfdz.util.MessagesUtil;
 import com.hrevfdz.util.QueriesUtil;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +30,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 @ManagedBean
@@ -55,6 +63,18 @@ public class SaleController implements Serializable {
         } catch (ParseException ex) {
             Logger.getLogger(SaleController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
+        Document pdf = (Document) document;
+        pdf.open();
+        pdf.setPageSize(PageSize.A4);
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String logo = externalContext.getRealPath("") + File.separator + "resources"  + File.separator + "images" + File.separator + "Farma_Sur_small.png";
+//        pdf.set
+        pdf.addTitle("REPORTE DE VENTAS");
+        pdf.add(Image.getInstance(logo));
     }
 
     public void doFindAll() {
