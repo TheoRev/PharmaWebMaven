@@ -11,8 +11,30 @@
         <ui:composition template="./../templates/template.xhtml">
 
             <ui:define name="content">
-
-                <p:growl id="wellcomeMessage" showDetail="true" sticky="true"/>
+                <p:growl id="wellcomeMessage" showDetail="true" />
+                
+                <h:form id="frmFiltroSale">
+                    <br />
+                    <p:panel id="pnlBusqueda" style="font-size: 10pt;">
+                        <p:outputLabel for="txtFechaSale" value="Fecha:" />&nbsp;
+                        <p:calendar id="txtFechaSale" pattern="dd/MM/yyyy" navigator="true"
+                                    effect="fold" value="#{paymentsController.fecha}" 
+                                    validatorMessage="Este compo no debe estar vacio"
+                                    locale="es"
+                                    showOn="button"
+                                    maxdate="#{paymentsController.fecAct}">
+                            <p:ajax event="dateSelect"
+                                    listener="#{paymentsController.doFindByFecha()}"
+                                    update=":frmPayResult:pnlPayResult" />
+                        </p:calendar>
+                        &nbsp;
+                        <p:commandButton icon="fa fa-search"
+                                         value="Mostrar todo"
+                                         action="#{paymentsController.doFindAll()}"
+                                         update=":frmPayResult:pnlPayResult wellcomeMessage" />
+                    </p:panel>
+                    <br />
+                </h:form>
 
                 <h:form id="frmPayResult">
                     <p:growl id="showMessagePay" showDetail="true" />
@@ -88,8 +110,9 @@
                                          value="#{paymentsController.payments.userId.username}" disabled="true" />
                             <p:outputLabel for="txtFecSup" value="Fecha" />
                             <p:calendar id="txtFecSup" value="#{paymentsController.payments.fecha}" navigator="true"
-                                        pattern="dd/MM/yyyy" effect="fold" 
-                                        showOn="button" required="true"/>
+                                        pattern="dd/MM/yyyy" effect="fold" locale="es"
+                                        showOn="button" required="true"
+                                        maxdate="#{paymentsController.fecAct}"/>
                             <p:outputLabel value="Laboratorio"/>
                             <p:selectOneMenu id="labs" effect="fold"
                                              converter="labConverter"

@@ -30,7 +30,7 @@
                                          columns="2">
                                 <p:outputLabel value="Fecha"/>
                                 <p:calendar value="#{usersController.startWork.fecha}" navigator="true"
-                                            pattern="dd/MM/yyyy" effect="fold" 
+                                            pattern="dd/MM/yyyy" effect="fold" locale="es"
                                             showOn="button"/>
                                 <p:outputLabel value="Monto en caja"/>
                                 <p:inputNumber id="txtMontoCaja" value="#{usersController.startWork.capital}" symbol="S/. "

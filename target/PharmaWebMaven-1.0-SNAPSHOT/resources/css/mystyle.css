@@ -26,6 +26,10 @@ icon{
     font-size: 2pt;
 }
 
+.action-content{
+    text-align: right;
+}
+
 .action_columns{
     width: 105pt;
 }

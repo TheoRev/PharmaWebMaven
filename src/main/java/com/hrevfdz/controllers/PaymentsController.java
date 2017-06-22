@@ -15,9 +15,12 @@ import com.hrevfdz.services.IPharmacy;
 import com.hrevfdz.util.AccionUtil;
 import com.hrevfdz.util.MessagesUtil;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -37,7 +40,11 @@ public class PaymentsController implements Serializable {
     private List<Laboratory> laboratorys;
     private Laboratory laboratory;
 
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
     private String accion;
+    private Date fecha = new Date();
+    private String fecAct = sdf.format(fecha);
 
     @PostConstruct
     public void init() {
@@ -46,6 +53,11 @@ public class PaymentsController implements Serializable {
         doFindAll();
         doGetLaboratories();
         doGetUserActive();
+        try {
+            fecha = sdf.parse(fecAct);
+        } catch (ParseException ex) {
+            Logger.getLogger(PaymentsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void doCreate() {
@@ -165,7 +177,7 @@ public class PaymentsController implements Serializable {
     public void doGetCaja(Payments p) {
         FacesMessage msg = null;
         IPharmacy dao = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
             double totalSales;
@@ -210,6 +222,11 @@ public class PaymentsController implements Serializable {
         doGetLaboratories();
         doGetUserActive();
         doFindAll();
+        try {
+            payments.setFecha(sdf.parse(fecAct));
+        } catch (ParseException ex) {
+            Logger.getLogger(PaymentsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void doUpgrade(Payments p) {
@@ -238,6 +255,23 @@ public class PaymentsController implements Serializable {
 
         try {
             final String query = "SELECT p FROM Payments p";
+            paymentses = dao.findByQuery(query);
+        } catch (Exception e) {
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.ERROR_TITLE, MessagesUtil.ERROR + ": " + e.getMessage());
+        }
+
+        if (msg != null) {
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public void doFindByFecha() {
+        FacesMessage msg = null;
+        IPharmacy<Payments> dao = new PaymentsDAO();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            final String query = "SELECT p FROM Payments p WHERE p.fecha = '" + sdf.format(fecha) + "'";
             paymentses = dao.findByQuery(query);
         } catch (Exception e) {
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.ERROR_TITLE, MessagesUtil.ERROR + ": " + e.getMessage());
@@ -318,6 +352,22 @@ public class PaymentsController implements Serializable {
 
     public void setLaboratory(Laboratory laboratory) {
         this.laboratory = laboratory;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getFecAct() {
+        return fecAct;
+    }
+
+    public void setFecAct(String fecAct) {
+        this.fecAct = fecAct;
     }
 
 }
