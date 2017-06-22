@@ -15,12 +15,11 @@
             <h:form id="frmValidacion">
                 <p:growl id="grValidacion" showDetail="true" sticky="true"/>
                 <p:panel header="Ingreso al Sistema">
-                    <p:panelGrid columns="2" columnClasses="no-border, no-border, no-border">                        
+                    <p:panelGrid columns="2">                        
                         <p:outputLabel for="txtUser" value="Usuario"/>
                         <p:inputText id="txtUser" value="#{usersController.usuario.username}" required="true"/>
                         <p:outputLabel for="txtPass" value="Password"/>
                         <p:password id="txtPass" value="#{usersController.usuario.password}" required="true"/>
-                        <br/>
                         <f:facet name="footer">
                             <div align="right">
                                 <p:commandButton value="Ingresar" icon="fa fa-sign-in"

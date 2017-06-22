@@ -16,7 +16,7 @@
                       minimizable="true" header="Productos Ingresados y/o Actualizados">
                 <p:outputLabel value="Fecha" />&nbsp;
                 <p:calendar pattern="dd/MM/yyyy" navigator="true"
-                            effect="fold"
+                            effect="fold" locale="es"
                             showOn="button"
                             value="#{ingresoProdController.fecha}">
                     <p:ajax event="dateSelect"
@@ -60,6 +60,5 @@
                 </p:panel>
             </p:dialog>
         </h:form>
-
     </h:body>
 </html>

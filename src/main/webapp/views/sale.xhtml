@@ -19,7 +19,9 @@
                         <p:calendar id="txtFechaSale" pattern="dd/MM/yyyy" navigator="true"
                                     effect="fold" value="#{saleController.fecha}" 
                                     validatorMessage="Este compo no debe estar vacio"
-                                    showOn="button">
+                                    locale="es"
+                                    showOn="button"
+                                    maxdate="#{saleController.fecAct}">
                             <p:ajax event="dateSelect"
                                     listener="#{saleController.doFindByFecha()}"
                                     update=":frmSaleResult:pnlSaleResult" />
@@ -56,7 +58,7 @@
                             <f:facet name="{Exporters}">
                                 <h:commandLink title="Exporatar a PDF">
                                     <p:graphicImage name="/images/pdf.png" width="24"/>
-                                    <p:dataExporter type="pdf" target="tblSaleResult" fileName="ventas"/>
+                                    <p:dataExporter type="pdf" target="tblSaleResult" fileName="ventas" preProcessor="#{saleController.preProcessPDF}"/>
                                 </h:commandLink>
                             </f:facet>
 
@@ -155,8 +157,9 @@
                                          disabled="true" />
                             <p:outputLabel value="Fecha" />
                             <p:calendar value="#{saleController.sale.fecha}" navigator="true"
-                                        pattern="dd/MM/yyyy" effect="fold" 
-                                        showOn="button"/>
+                                        pattern="dd/MM/yyyy" effect="fold" locale="es"
+                                        showOn="button"
+                                        maxdate="#{saleController.fecAct}"/>
                             <p:outputLabel value="Producto" />
                             <p:selectOneMenu id="smProducto" effect="fold"
                                              converter="stockConverter"

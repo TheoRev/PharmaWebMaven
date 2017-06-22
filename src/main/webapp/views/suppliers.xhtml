@@ -16,8 +16,9 @@
                       id="idDlgSuppR"
                       showEffect="explode"
                       hideEffect="explode" width="1200"
-                      header="LISTA DE DISTRIBUIDORES">
-                
+                      header="LISTA DE DISTRIBUIDORES"
+                      minimizable="true">
+
                 <p:panel id="pnlActions" styleClass="panel-content"
                          style="height: 30pt;">
                     <p:commandButton icon="fa fa-plus"
@@ -26,10 +27,10 @@
                                      update=":frmSuppCU:idDlgSuppCU"
                                      oncomplete="PF('dlgSuppCU').show()"
                                      action="#{suppliersController.doNew()}"
-                                     style="float: left"/>
+                                     style="float: right"/>
                 </p:panel>
                 <br/>
-                
+
                 <p:panel id="pnlSuppR" styleClass="panel-content" >
                     <p:dataTable id="tblSuppR" rows="10" paginator="true"
                                  value="#{suppliersController.supplierses}"
@@ -81,16 +82,16 @@
                       showEffect="explode" hideEffect="explode">
                 <p:panelGrid id="pgSuppCU" columns="2">
                     <p:outputLabel value="Código"/>
-                    <p:inputText value="#{suppliersController.suppliers.codigo}" disabled="true"/>
+                    <p:inputText id="txtCod" value="#{suppliersController.suppliers.codigo}" disabled="true"/>
                     <p:outputLabel for="txtNombre" value="Nombre"/>
                     <p:inputText id="txtNombre" value="#{suppliersController.suppliers.nombre}" required="true"/>
                     <p:outputLabel value="Encargado"/>
                     <p:inputText value="#{suppliersController.suppliers.encargado}"/>
                     <p:outputLabel for="txtTelefCel" value="Telef / Cel."/>
                     <p:inputText id="txtTelefCel" value="#{suppliersController.suppliers.telefono}" required="true"/>
-                    <p:outputLabel value="Email"/>
-                    <p:inputText value="#{suppliersController.suppliers.email}"
-                                 placeholder="email@email.com">
+                    <p:outputLabel for="email" value="Email"/>
+                    <p:inputText id="email" value="#{suppliersController.suppliers.email}"
+                                 placeholder="email@email.com" required="true">
                         <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
                     </p:inputText>
 

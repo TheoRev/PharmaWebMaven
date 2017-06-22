@@ -34,7 +34,6 @@ com\hrevfdz\services\IPharmacy.class
 com\hrevfdz\models\Laboratory.class
 com\hrevfdz\models\Access.class
 com\hrevfdz\models\StartWork_.class
-.netbeans_automatic_build
 com\hrevfdz\dao\SaleDAO.class
 com\hrevfdz\models\Suppliers.class
 com\hrevfdz\controllers\SuppliersController.class
@@ -44,5 +43,6 @@ com\hrevfdz\controllers\PaymentsController.class
 com\hrevfdz\services\PharmacyConexion.class
 com\hrevfdz\services\PharmacyService.class
 com\hrevfdz\models\Suppliers_.class
+com\hrevfdz\util\Test.class
 com\hrevfdz\controllers\UsersController.class
 com\hrevfdz\dao\PaymentsDAO.class
