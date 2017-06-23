@@ -41,10 +41,11 @@ public class PaymentsController implements Serializable {
     private Laboratory laboratory;
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
 
     private String accion;
     private Date fecha = new Date();
-    private String fecAct = sdf.format(fecha);
+    private String fecAct = sdf2.format(fecha);
 
     @PostConstruct
     public void init() {
@@ -54,7 +55,7 @@ public class PaymentsController implements Serializable {
         doGetLaboratories();
         doGetUserActive();
         try {
-            fecha = sdf.parse(fecAct);
+            fecha = sdf2.parse(fecAct);
         } catch (ParseException ex) {
             Logger.getLogger(PaymentsController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -223,7 +224,7 @@ public class PaymentsController implements Serializable {
         doGetUserActive();
         doFindAll();
         try {
-            payments.setFecha(sdf.parse(fecAct));
+            payments.setFecha(sdf2.parse(fecAct));
         } catch (ParseException ex) {
             Logger.getLogger(PaymentsController.class.getName()).log(Level.SEVERE, null, ex);
         }

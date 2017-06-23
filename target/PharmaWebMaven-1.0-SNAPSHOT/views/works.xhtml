@@ -27,7 +27,10 @@
                                     effect="fold" value="#{startWorkController.startWork.fecha}" 
                                     locale="es"
                                     validatorMessage="Este compo no debe estar vacio"
-                                    showOn="button"/>
+                                    showOn="button">
+                            <p:ajax event="dateSelect"
+                                    update="pnlWorks"/>
+                        </p:calendar>
                         <p:selectOneMenu id="cbUsers" effect="fold"
                                          converter="usersConverter"
                                          value="#{startWorkController.startWork.userId}" var="us"
@@ -45,7 +48,7 @@
                                          update="pnlWorks"/>
                     </p:panelGrid>
                 </p:panel>
-
+            
                 <p:panel id="pnlWorks">                    
                     <p:dataTable id="tblWorks"
                                  rows="10" paginator="true"
