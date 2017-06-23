@@ -155,14 +155,15 @@ public class SaleController implements Serializable {
     public double doGetTotal(Date f) {
         FacesMessage message = null;
         IPharmacy daos = new SaleDAO();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf4 = new SimpleDateFormat("yyyy-MM-dd");
 
         String query = "SELECT SUM(s.subtotal) FROM Sale s WHERE s.fecha = '";
 
         double total = 0;
 
         try {
-            query += (fecha != null) ? sdf.format(fecha) : sdf.format(f);
+//            query += (fecha != null) ? sdf4.format(fecha) : sdf4.format(f);
+            query += sdf4.format(f);
             query += "'";
             total = daos.findBy(query) != null ? (double) daos.findBy(query) : 0;
         } catch (Exception ex) {

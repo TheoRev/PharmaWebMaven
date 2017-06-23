@@ -11,7 +11,7 @@
 
     <h:body>
         <h:form id="frmWorks">
-            <p:growl id="msgWorks" showDetail="true"/>
+            <p:growl id="msgWorks" showDetail="false"/>
             <p:dialog id="idDlgWorks"
                       widgetVar="dlgWorks"
                       closable="true"
@@ -21,7 +21,7 @@
                       hideEffect="explode"
                       width="800"
                       header="Historial de Actividades">
-                <p:panel id="pnlWorksFilters">
+                <p:panel id="pnlWorksFilters" visible="true">
                     <p:panelGrid columns="3">
                         <p:calendar id="txtFechaWork" pattern="dd/MM/yyyy" navigator="true"
                                     effect="fold" value="#{startWorkController.startWork.fecha}" 
@@ -29,7 +29,8 @@
                                     validatorMessage="Este compo no debe estar vacio"
                                     showOn="button">
                             <p:ajax event="dateSelect"
-                                    update="pnlWorks"/>
+                                    update="pnlWorks"
+                                    listener="#{startWorkController.doFindByFecha()}"/>
                         </p:calendar>
                         <p:selectOneMenu id="cbUsers" effect="fold"
                                          converter="usersConverter"
@@ -38,19 +39,23 @@
                             <f:selectItem itemLabel="Seleccione" itemValue="-1" />
                             <f:selectItems value="#{startWorkController.usuarios}" var="u"
                                            itemLabel="#{u.username}" itemValue="#{u}"/>
+                            <p:ajax event="change"
+                                    update="pnlWorks"
+                                    listener="#{startWorkController.doFindByUser()}"/>
                             <p:column>
                                 <h:outputText value="#{us.username}"/>
                             </p:column>
                         </p:selectOneMenu>
                         <p:commandButton title="Buscar"
                                          icon="fa fa-search"
-                                         action="#{startWorkController.doFindBy()}"
-                                         update="pnlWorks"/>
+                                         action="#{startWorkController.doFindByUser_Fecha()}"
+                                         update="pnlWorks tblWorks"/>
                     </p:panelGrid>
                 </p:panel>
-            
+
                 <p:panel id="pnlWorks">                    
                     <p:dataTable id="tblWorks"
+                                 widgetVar="tblWidgetWorks"
                                  rows="10" paginator="true"
                                  value="#{startWorkController.startWorks}" var="ow"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -58,7 +63,13 @@
                         <p:column headerText="Id">
                             <h:outputText value="#{ow.id}"/>
                         </p:column>
-                        <p:column headerText="Fecha">
+                        <p:column headerText="Fecha" filterBy="#{ow.fecha}" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('tblWidgetWorks').filter()">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="-1" noSelectionOption="true"/>
+                                    <f:selectItems value="#{startWorkController.meses}" var="m"/>
+                                </p:selectOneMenu>
+                            </f:facet>
                             <h:outputText value="#{ow.fecha}">
                                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                             </h:outputText>
@@ -66,7 +77,14 @@
                         <p:column headerText="Monto">
                             <h:outputText value="S/. #{ow.capital}"/>
                         </p:column>
-                        <p:column headerText="Usuario">
+                        <p:column headerText="Usuario" filterBy="#{ow.userId.username}" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('tblWidgetWorks').filter()">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="-1" noSelectionOption="true"/>
+                                    <f:selectItems value="#{startWorkController.usuarios}" var="u"
+                                                   itemLabel="#{u.username}" itemValue="#{u.username}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
                             <h:outputText value="#{ow.userId.username}"/>
                         </p:column>
                     </p:dataTable>
