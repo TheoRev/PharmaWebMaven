@@ -20,7 +20,7 @@
                                 <p:commandButton value="Historial"
                                                  style="float: right;"
                                                  icon="fa fa-fw fa-eye"
-                                                 update=":frmWorks:idDlgWorks"
+                                                 update=":idDlgWorks"
                                                  oncomplete="PF('dlgWorks').show()"
                                                  action="#{startWorkController.doFindAll()}"/>
                             </f:facet>
@@ -48,7 +48,7 @@
                     </div>      
                 </h:form>
 
-                <ui:include src="works.xhtml"/>
+                <ui:include src="temp.xhtml"/>
 
             </ui:define>
 

@@ -40,10 +40,10 @@
                         <p:column headerText="Código" styleClass="cod_lab"  width="50">
                             <h:outputText value="#{s.codigo}"/>
                         </p:column>
-                        <p:column headerText="Nombre" style="width: 150pt;">
+                        <p:column headerText="Nombre" filterBy="#{s.nombre}" style="width: 150pt;">
                             <h:outputText value="#{s.nombre}"/>
                         </p:column>
-                        <p:column headerText="Encargado" style="width: 150pt;">
+                        <p:column headerText="Encargado" filterBy="#{s.encargado}" style="width: 150pt;">
                             <h:outputText value="#{s.encargado}"/>
                         </p:column>
                         <p:column headerText="Teléfono/Cel." style="width: 150pt;">

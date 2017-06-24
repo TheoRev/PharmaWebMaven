@@ -28,7 +28,7 @@ public class StartWorkController implements Serializable {
     private List<StartWork> startWorks;
     private StartWork startWork;
     private List<Users> usuarios;
-    
+
     private Map meses = new HashMap();
 
     private Date fecha;
@@ -48,7 +48,7 @@ public class StartWorkController implements Serializable {
             meses.put(10, "Octubre");
             meses.put(11, "Noviembre");
             meses.put(12, "Diciembre");
-            
+
             if (startWork == null) {
                 startWork = new StartWork();
             }
@@ -128,13 +128,10 @@ public class StartWorkController implements Serializable {
         IPharmacy<StartWork> dao = new StartWorkDAO();
         SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
 
-        final String query = "SELECT w FROM StartWork w WHERE w.fecha = '" + sdf3.format(fecha) + "'";
-
         try {
-            if (fecha != null) {
-                startWorks.clear();
-                startWorks = dao.findByQuery(query);
-            }
+            String query = "SELECT w FROM StartWork w WHERE w.fecha = '" + sdf3.format(startWork.getFecha()) + "'";
+
+            startWorks = dao.findByQuery(query);
         } catch (Exception ex) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN DB", ex.getMessage());
         }
@@ -149,13 +146,10 @@ public class StartWorkController implements Serializable {
         IPharmacy<StartWork> dao = new StartWorkDAO();
         SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
 
-        final String query = "SELECT w FROM StartWork w WHERE w.userId.username = '" + sdf3.format(fecha) + "'";
-
         try {
-            if (fecha != null) {
-                startWorks.clear();
-                startWorks = dao.findByQuery(query);
-            }
+            final String query = "SELECT w FROM StartWork w WHERE w.userId.username = '" + startWork.getUserId().getUsername() + "'";
+
+            startWorks = dao.findByQuery(query);
         } catch (Exception ex) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN DB", ex.getMessage());
         }
@@ -170,14 +164,11 @@ public class StartWorkController implements Serializable {
         IPharmacy<StartWork> dao = new StartWorkDAO();
         SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
 
-        final String query = "SELECT w FROM StartWork w WHERE w.userId.username = '" + sdf3.format(fecha)
-                + "' and w.fecha = '" + sdf3.format(fecha) + "'";
+        final String query = "SELECT w FROM StartWork w WHERE w.userId.username = '" + sdf3.format(startWork.getFecha())
+                + "' and w.fecha = '" + startWork.getUserId().getUsername() + "'";
 
         try {
-            if (fecha != null) {
-                startWorks.clear();
                 startWorks = dao.findByQuery(query);
-            }
         } catch (Exception ex) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN DB", ex.getMessage());
         }
