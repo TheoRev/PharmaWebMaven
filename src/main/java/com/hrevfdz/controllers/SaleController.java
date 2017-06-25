@@ -75,8 +75,10 @@ public class SaleController implements Serializable {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "images" + File.separator + "Farma_Sur_small.png";
 //        pdf.set
-        pdf.addTitle("REPORTE DE VENTAS");
+        
         pdf.add(Image.getInstance(logo));
+        pdf.addAuthor("REPORTE DE VENTAS");
+        pdf.addCreationDate();
     }
 
     public void doFindAll() {

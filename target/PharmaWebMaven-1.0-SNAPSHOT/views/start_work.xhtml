@@ -34,21 +34,26 @@
                                             showOn="button"/>
                                 <p:outputLabel value="Monto en caja"/>
                                 <p:inputNumber id="txtMontoCaja" value="#{usersController.startWork.capital}" symbol="S/. "
-                                               emptyValue="0.00"/>
+                                               emptyValue="0.00" minValue="0">
+                                    <p:ajax event="change"
+                                            update="btnSaveWork"/>
+                                </p:inputNumber>
 
                                 <f:facet name="footer">
-                                    <p:commandButton 
+                                    <p:commandButton
+                                        id="btnSaveWork"
                                         value="GUARDAR"
                                         icon="fa fa-floppy-o"
                                         action="#{usersController.doCreate(usersController.usuario)}"
-                                        style="float: right;"/>
+                                        style="float: right;"
+                                        disabled="#{(usersController.startWork.capital>0)?false:true}"/>
                                 </f:facet>
                             </p:panelGrid>
                         </p:panel>            
                     </div>      
                 </h:form>
 
-                <ui:include src="temp.xhtml"/>
+                <ui:include src="works.xhtml"/>
 
             </ui:define>
 

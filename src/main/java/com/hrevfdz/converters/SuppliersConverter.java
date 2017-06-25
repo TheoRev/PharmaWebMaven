@@ -1,6 +1,5 @@
 package com.hrevfdz.converters;
 
-import com.hrevfdz.models.StockProducto;
 import com.hrevfdz.models.Suppliers;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

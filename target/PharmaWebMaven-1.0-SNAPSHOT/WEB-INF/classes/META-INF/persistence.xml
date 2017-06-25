@@ -14,9 +14,9 @@
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/farmasur"/>
-      <property name="javax.persistence.jdbc.user" value="theo"/>
+      <property name="javax.persistence.jdbc.user" value="theo_admin"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="ambu"/>
+      <property name="javax.persistence.jdbc.password" value="c2hpbm9iaTI1"/>
     </properties>
   </persistence-unit>
 </persistence>

@@ -81,7 +81,7 @@
                 <p:inputText id="txtNomLab" value="#{laboratoryController.laboratorio.nomLab}" required="true"/>
                 <p:outputLabel value="Distribuidor"/>
                 <p:selectOneMenu id="smSupplier" effect="fold"
-                                 converter="labConverter"
+                                 converter="supplierConverter"
                                  value="#{laboratoryController.laboratorio.codSupplier}" var="labo"
                                  filter="true" filterMatchMode="startsWith">
                     <f:selectItem itemLabel="Seleccione" itemValue="-1"/>

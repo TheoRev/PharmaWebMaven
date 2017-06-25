@@ -16,10 +16,10 @@
                 <p:growl id="grValidacion" showDetail="true" sticky="true"/>
                 <p:panel header="Ingreso al Sistema">
                     <p:panelGrid columns="2">                        
-                        <p:outputLabel for="txtUser" value="Usuario"/>
-                        <p:inputText id="txtUser" value="#{usersController.usuario.username}" required="true"/>
-                        <p:outputLabel for="txtPass" value="Password"/>
-                        <p:password id="txtPass" value="#{usersController.usuario.password}" required="true"/>
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <p:inputText id="txtUser" placeholder="Usuario" value="#{usersController.usuario.username}" required="true" />
+                        <i class="fa fa-key" aria-hidden="true"></i>
+                        <p:password id="txtPass" placeholder="Password" value="#{usersController.usuario.password}" required="true" />
                         <f:facet name="footer">
                             <div align="right">
                                 <p:commandButton value="Ingresar" icon="fa fa-sign-in"

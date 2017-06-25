@@ -1,7 +1,10 @@
 package com.hrevfdz.controllers;
 
+import com.hrevfdz.dao.PaymentsDAO;
+import com.hrevfdz.dao.SaleDAO;
 import com.hrevfdz.dao.StartWorkDAO;
 import com.hrevfdz.dao.UsersDAO;
+import com.hrevfdz.models.Payments;
 import com.hrevfdz.models.StartWork;
 import com.hrevfdz.models.Users;
 import com.hrevfdz.services.IPharmacy;
@@ -159,23 +162,48 @@ public class StartWorkController implements Serializable {
         }
     }
 
-    public void doFindByUser_Fecha() {
-        FacesMessage message = null;
-        IPharmacy<StartWork> dao = new StartWorkDAO();
-        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
-
-        final String query = "SELECT w FROM StartWork w WHERE w.userId.username = '" + sdf3.format(startWork.getFecha())
-                + "' and w.fecha = '" + startWork.getUserId().getUsername() + "'";
+    public double doGetCaja(StartWork p) {
+        FacesMessage msg = null;
+        IPharmacy dao = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        double montoAct = 0;
 
         try {
-                startWorks = dao.findByQuery(query);
-        } catch (Exception ex) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN DB", ex.getMessage());
+            double totalSales;
+            double totalPays;
+            String q1;
+            String q2;
+            String q3;
+
+            if (p == null) {
+                q1 = "SELECT sw FROM StartWork sw WHERE sw.fecha = '" + sdf.format(new Date()) + "'";
+                q2 = "SELECT SUM(s.subtotal) FROM Sale s WHERE s.fecha = '" + sdf.format(new Date()) + "'";
+                q3 = "SELECT SUM(p.monto) FROM Payments p WHERE p.fecha = '" + sdf.format(new Date()) + "'";
+            } else {
+                q1 = "SELECT sw FROM StartWork sw WHERE sw.fecha = '" + sdf.format(p.getFecha()) + "'";
+                q2 = "SELECT SUM(s.subtotal) FROM Sale s WHERE s.fecha = '" + sdf.format(p.getFecha()) + "'";
+                q3 = "SELECT SUM(p.monto) FROM Payments p WHERE p.fecha = '" + sdf.format(p.getFecha()) + "'";
+            }
+
+            dao = (dao == null) ? new SaleDAO() : dao;
+            totalSales = dao.findBy(q2) != null ? (double) dao.findBy(q2) : 0;
+            dao = new PaymentsDAO();
+            totalPays = dao.findBy(q3) != null ? (double) dao.findBy(q3) : 0;
+
+            dao = new StartWorkDAO();
+            startWork = (StartWork) dao.findBy(q1);
+            montoAct = (startWork.getCapital() + totalSales) - totalPays;
+//            startWork.setCapital(montoAct);
+//            payments.setIdSw(startWork);
+        } catch (Exception e) {
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.ERROR_TITLE, e.getMessage());
         }
 
-        if (message != null) {
-            FacesContext.getCurrentInstance().addMessage(null, message);
+        if (msg != null) {
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+
+        return montoAct;
     }
 
     public List<StartWork> getStartWorks() {
