@@ -31,10 +31,10 @@
                                          value="Mostrar todo"
                                          action="#{saleController.doFindAll()}"
                                          update=":frmSaleResult:pnlSaleResult wellcomeMessage" />
-                        
-                        <p:panel id="pnlReports">
-                            <p:commandButton value="Generar Reporte"/>
-                        </p:panel>
+                        &nbsp;
+                        <p:commandButton value="Generar Reporte"
+                                         actionListener="#{saleController.generarReporte}"
+                                         style="float: right;"/>
                     </p:panel>
                     <br />
                 </h:form>

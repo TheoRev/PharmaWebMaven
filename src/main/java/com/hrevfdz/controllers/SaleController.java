@@ -35,7 +35,13 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @ManagedBean
 @ViewScoped
@@ -91,6 +97,18 @@ public class SaleController implements Serializable {
             fecha = sdfr.parse(sdfr.format(fecha));
             Map<String, Object> parametro = new HashMap<String, Object>();
             parametro.put("fec", fecha);
+
+            File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/reports/ventas.jasper"));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, new JRBeanCollectionDataSource(this.getSales()));
+
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            response.addHeader("Content-disposition", "attachment; filename=jsfReporte.pdf");
+            try (ServletOutputStream stream = response.getOutputStream()) {
+                JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+                
+                stream.flush();
+            }
+            FacesContext.getCurrentInstance().responseComplete();
         } catch (ParseException ex) {
             Logger.getLogger(SaleController.class.getName()).log(Level.SEVERE, null, ex);
         }
