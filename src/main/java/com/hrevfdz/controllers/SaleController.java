@@ -21,7 +21,9 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +34,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import net.sf.jasperreports.engine.JRException;
 
 @ManagedBean
 @ViewScoped
@@ -75,10 +79,21 @@ public class SaleController implements Serializable {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "images" + File.separator + "Farma_Sur_small.png";
 //        pdf.set
-        
+
         pdf.add(Image.getInstance(logo));
         pdf.addAuthor("REPORTE DE VENTAS");
         pdf.addCreationDate();
+    }
+
+    public void generarReporte(ActionEvent event) throws JRException, IOException {
+        try {
+            SimpleDateFormat sdfr = new SimpleDateFormat("dd/MM/yyyy");
+            fecha = sdfr.parse(sdfr.format(fecha));
+            Map<String, Object> parametro = new HashMap<String, Object>();
+            parametro.put("fec", fecha);
+        } catch (ParseException ex) {
+            Logger.getLogger(SaleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void doFindAll() {
