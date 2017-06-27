@@ -22,6 +22,7 @@ com\hrevfdz\models\Payments_.class
 com\hrevfdz\dao\IngresoProductoDAO.class
 com\hrevfdz\dao\UsersDAO.class
 com\hrevfdz\models\IngresoProducto.class
+com\hrevfdz\util\AccessKey.class
 com\hrevfdz\controllers\ReporteVentasController.class
 com\hrevfdz\models\IngresoProducto_.class
 com\hrevfdz\models\Sale.class
@@ -34,6 +35,7 @@ com\hrevfdz\services\IPharmacy.class
 com\hrevfdz\models\Laboratory.class
 com\hrevfdz\models\Access.class
 com\hrevfdz\models\StartWork_.class
+com\hrevfdz\report\Conexion.class
 com\hrevfdz\dao\SaleDAO.class
 com\hrevfdz\models\Suppliers.class
 com\hrevfdz\controllers\SuppliersController.class
@@ -43,6 +45,5 @@ com\hrevfdz\controllers\PaymentsController.class
 com\hrevfdz\services\PharmacyConexion.class
 com\hrevfdz\services\PharmacyService.class
 com\hrevfdz\models\Suppliers_.class
-com\hrevfdz\util\Test.class
 com\hrevfdz\controllers\UsersController.class
 com\hrevfdz\dao\PaymentsDAO.class

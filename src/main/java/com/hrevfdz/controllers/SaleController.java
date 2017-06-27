@@ -6,6 +6,7 @@ import com.hrevfdz.dao.StockProductoDAO;
 import com.hrevfdz.models.Access;
 import com.hrevfdz.models.Sale;
 import com.hrevfdz.models.StockProducto;
+import com.hrevfdz.report.Conexion;
 import com.hrevfdz.services.IPharmacy;
 import com.hrevfdz.util.AccionUtil;
 import com.hrevfdz.util.MessagesUtil;
@@ -18,6 +19,7 @@ import com.lowagie.text.PageSize;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,7 +43,10 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 @ManagedBean
 @ViewScoped
@@ -77,21 +82,7 @@ public class SaleController implements Serializable {
         }
     }
 
-    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
-        Document pdf = (Document) document;
-        pdf.open();
-        pdf.setPageSize(PageSize.A4);
-
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "images" + File.separator + "Farma_Sur_small.png";
-//        pdf.set
-
-        pdf.add(Image.getInstance(logo));
-        pdf.addAuthor("REPORTE DE VENTAS");
-        pdf.addCreationDate();
-    }
-
-    public void generarReporte(ActionEvent event) throws JRException, IOException {
+    public void generarReporte() throws JRException, IOException, SQLException {
         try {
             SimpleDateFormat sdfr = new SimpleDateFormat("dd/MM/yyyy");
             fecha = sdfr.parse(sdfr.format(fecha));
@@ -99,13 +90,13 @@ public class SaleController implements Serializable {
             parametro.put("fec", fecha);
 
             File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/reports/ventas.jasper"));
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, new JRBeanCollectionDataSource(this.getSales()));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, Conexion.getConexion());
 
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename=jsfReporte.pdf");
+            String filename = "Reporte de Ventas - (" + sdfr.format(fecha) + ").pdf";
+            response.addHeader("Content-disposition", "attachment; filename=" + filename);
             try (ServletOutputStream stream = response.getOutputStream()) {
                 JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-                
                 stream.flush();
             }
             FacesContext.getCurrentInstance().responseComplete();

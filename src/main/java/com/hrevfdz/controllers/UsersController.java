@@ -87,7 +87,7 @@ public class UsersController implements Serializable {
                 ruta = "index";
             }
         } catch (Exception ex) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN LA VALIDACION", "Usuario o Password incorrectos");
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN SERVIDOR", ex.getMessage());
             ruta = "index";
         }
 
