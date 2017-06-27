@@ -13,13 +13,14 @@ D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\models\Laborat
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\models\Access.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\controllers\StockController.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\models\IngresoProducto.java
+D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\util\AccessKey.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\controllers\PaymentsController.java
-D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\util\Test.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\dao\AccessDAO.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\dao\LaboratoryDAO.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\controllers\UsersController.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\controllers\SuppliersController.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\dao\PaymentsDAO.java
+D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\report\Conexion.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\models\Sale.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\converters\LaboratoryConverter.java
 D:\Docs\NetBeansProjects\PharmaWebMaven\src\main\java\com\hrevfdz\dao\StartWorkDAO.java

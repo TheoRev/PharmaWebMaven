@@ -10,24 +10,29 @@
     </h:head>
 
     <h:body>
-        <h:form id="frmWorks">
-            <p:growl id="msgWorks" showDetail="true"/>
-            <p:dialog id="idDlgWorks"
-                      widgetVar="dlgWorks"
-                      closable="true"
-                      minimizable="true"
-                      resizable="false"
-                      showEffect="explode"
-                      hideEffect="explode"
-                      width="800"
-                      header="Historial de Actividades">
-                <p:panel id="pnlWorksFilters">
+
+        <p:growl id="msgWorks" showDetail="false"/>
+        <p:dialog id="idDlgWorks"
+                  widgetVar="dlgWorks"
+                  closable="true"
+                  minimizable="true"
+                  resizable="false"
+                  showEffect="explode"
+                  hideEffect="explode"
+                  width="800"
+                  header="Historial de Actividades">
+            <h:form id="frmFiltro">
+                <p:panel id="pnlWorksFilters" visible="true">
                     <p:panelGrid columns="3">
                         <p:calendar id="txtFechaWork" pattern="dd/MM/yyyy" navigator="true"
                                     effect="fold" value="#{startWorkController.startWork.fecha}" 
                                     locale="es"
                                     validatorMessage="Este compo no debe estar vacio"
-                                    showOn="button"/>
+                                    showOn="button">
+                            <p:ajax event="dateSelect"
+                                    update=":frmWorks:pnlWorks"
+                                    listener="#{startWorkController.doFindByFecha()}"/>
+                        </p:calendar>
                         <p:selectOneMenu id="cbUsers" effect="fold"
                                          converter="usersConverter"
                                          value="#{startWorkController.startWork.userId}" var="us"
@@ -35,27 +40,48 @@
                             <f:selectItem itemLabel="Seleccione" itemValue="-1" />
                             <f:selectItems value="#{startWorkController.usuarios}" var="u"
                                            itemLabel="#{u.username}" itemValue="#{u}"/>
+                            <p:ajax event="change"
+                                    update=":frmWorks:pnlWorks"
+                                    listener="#{startWorkController.doFindByUser()}"/>
                             <p:column>
                                 <h:outputText value="#{us.username}"/>
                             </p:column>
                         </p:selectOneMenu>
                         <p:commandButton title="Buscar"
                                          icon="fa fa-search"
-                                         action="#{startWorkController.doFindBy()}"
-                                         update="pnlWorks"/>
+                                         action="#{startWorkController.doFindAll()}"
+                                         update=":frmWorks:pnlWorks"/>
                     </p:panelGrid>
                 </p:panel>
+            </h:form>
 
+            <h:form id="frmWorks">
                 <p:panel id="pnlWorks">                    
                     <p:dataTable id="tblWorks"
-                                 rows="10" paginator="true"
+                                 widgetVar="tblWidgetWorks"
+                                 rows="5" paginator="true"
                                  value="#{startWorkController.startWorks}" var="ow"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="5,10,15" >
+                                 rowsPerPageTemplate="5,10,15"
+                                 sortBy="#{ow.fecha}"
+                                 expandableRowGroups="true"
+                                 style="font-size: 9pt;">
+
+                        <p:headerRow>
+                            <p:column>
+                                <h:outputText value="#{ow.fecha}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column/>
+                            <p:column/>
+                            <p:column/>
+                        </p:headerRow>
+
                         <p:column headerText="Id">
                             <h:outputText value="#{ow.id}"/>
                         </p:column>
-                        <p:column headerText="Fecha">
+                        <p:column headerText="Fecha" sortBy="#{ow.fecha}">
                             <h:outputText value="#{ow.fecha}">
                                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                             </h:outputText>
@@ -66,9 +92,22 @@
                         <p:column headerText="Usuario">
                             <h:outputText value="#{ow.userId.username}"/>
                         </p:column>
+
+                        <p:summaryRow>
+                            <p:column/>
+                            <p:column>
+                                <h:outputText value="Total"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{startWorkController.doGetCaja(ow)}">
+                                    <f:convertNumber type="currency" currencySymbol="S/. "/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column/>
+                        </p:summaryRow>
                     </p:dataTable>
                 </p:panel>
-            </p:dialog>
-        </h:form>
+            </h:form>
+        </p:dialog>
     </h:body>
 </html>

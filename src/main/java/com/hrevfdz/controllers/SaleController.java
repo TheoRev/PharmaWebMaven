@@ -6,6 +6,7 @@ import com.hrevfdz.dao.StockProductoDAO;
 import com.hrevfdz.models.Access;
 import com.hrevfdz.models.Sale;
 import com.hrevfdz.models.StockProducto;
+import com.hrevfdz.report.Conexion;
 import com.hrevfdz.services.IPharmacy;
 import com.hrevfdz.util.AccionUtil;
 import com.hrevfdz.util.MessagesUtil;
@@ -18,10 +19,13 @@ import com.lowagie.text.PageSize;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +36,17 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 @ManagedBean
 @ViewScoped
@@ -67,16 +82,27 @@ public class SaleController implements Serializable {
         }
     }
 
-    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
-        Document pdf = (Document) document;
-        pdf.open();
-        pdf.setPageSize(PageSize.A4);
+    public void generarReporte() throws JRException, IOException, SQLException {
+        try {
+            SimpleDateFormat sdfr = new SimpleDateFormat("dd/MM/yyyy");
+            fecha = sdfr.parse(sdfr.format(fecha));
+            Map<String, Object> parametro = new HashMap<String, Object>();
+            parametro.put("fec", fecha);
 
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "images" + File.separator + "Farma_Sur_small.png";
-//        pdf.set
-        pdf.addTitle("REPORTE DE VENTAS");
-        pdf.add(Image.getInstance(logo));
+            File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/reports/ventas.jasper"));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, Conexion.getConexion());
+
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            String filename = "Reporte de Ventas - (" + sdfr.format(fecha) + ").pdf";
+            response.addHeader("Content-disposition", "attachment; filename=" + filename);
+            try (ServletOutputStream stream = response.getOutputStream()) {
+                JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+                stream.flush();
+            }
+            FacesContext.getCurrentInstance().responseComplete();
+        } catch (ParseException ex) {
+            Logger.getLogger(SaleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void doFindAll() {
@@ -155,14 +181,15 @@ public class SaleController implements Serializable {
     public double doGetTotal(Date f) {
         FacesMessage message = null;
         IPharmacy daos = new SaleDAO();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf4 = new SimpleDateFormat("yyyy-MM-dd");
 
         String query = "SELECT SUM(s.subtotal) FROM Sale s WHERE s.fecha = '";
 
         double total = 0;
 
         try {
-            query += (fecha != null) ? sdf.format(fecha) : sdf.format(f);
+//            query += (fecha != null) ? sdf4.format(fecha) : sdf4.format(f);
+            query += sdf4.format(f);
             query += "'";
             total = daos.findBy(query) != null ? (double) daos.findBy(query) : 0;
         } catch (Exception ex) {

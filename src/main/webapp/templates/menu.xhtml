@@ -17,7 +17,7 @@
                 <p:menuitem value="Pagos" icon="fa fa-fw fa-money" url="../views/payments.xhtml"/>
                 <p:separator />                
                 <p:menuitem value="Caja" icon="fa fa-fw fa-archive" 
-                            update=":frmWorks:idDlgWorks"
+                            update=":idDlgWorks"
                             oncomplete="PF('dlgWorks').show()"
                             action="#{startWorkController.doFindAll()}"/>
                 <p:separator/>
@@ -36,7 +36,7 @@
         </h:form>
 
         <ui:include src="../views/works.xhtml"/>
-        <ui:include src="../views/suppliers.xhtml"/>
+        <ui:include src="../views/suppliers.xhtml"/>        
     </h:body>
 </html>
 

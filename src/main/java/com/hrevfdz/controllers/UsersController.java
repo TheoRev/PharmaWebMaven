@@ -20,46 +20,59 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @ManagedBean
 @SessionScoped
 public class UsersController implements Serializable {
-    
+
     private List<Users> usuarios;
     private Users usuario;
-    
+
     private StartWork startWork;
-    
+    private boolean active = true;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
     @PostConstruct
     public void init() {
         usuario = new Users();
         if (getStartWork() == null) {
             setStartWork(new StartWork());
+
+            try {
+                startWork.setFecha(new Date());
+                startWork.setFecha(sdf.parse(sdf.format(startWork.getFecha())));
+            } catch (ParseException e) {
+                Logger.getLogger(SaleController.class.getName()).log(Level.SEVERE, null, e);
+            }
         }
+
 //        showWellcomeMsge();
     }
-    
+
     public String logear() {
         FacesMessage message = null;
         String ruta = null;
         final String query = "select u from Users u where u.username='" + usuario.getUsername()
                 + "' and u.password='" + usuario.getPassword() + "'";
         IPharmacy<Users> dao = new UsersDAO();
-        
+
         try {
             Users u = dao.findBy(query);
             if (u != null) {
                 if (u.getUsername().equals(usuario.getUsername())
                         && u.getPassword().equals(usuario.getPassword())) {
-                    
+
                     if (findStartWork()) {
                         ruta = "views/sale?faces-redirect=true";
                     } else {
                         ruta = "views/start_work?faces-redirect=true";
                     }
-                    
+
                     createAccess(u);
-                    
+
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", usuario);
                     message = new FacesMessage(FacesMessage.SEVERITY_INFO, "ACCESO CONCEDIDO",
                             "Bienvenido" + usuario.getUsername().toUpperCase());
@@ -74,14 +87,14 @@ public class UsersController implements Serializable {
                 ruta = "index";
             }
         } catch (Exception ex) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN LA VALIDACION", "Usuario o Password incorrectos");
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN SERVIDOR", ex.getMessage());
             ruta = "index";
         }
-        
+
         FacesContext.getCurrentInstance().addMessage(null, message);
         return ruta;
     }
-    
+
     private void createAccess(Users u) throws ParseException, Exception {
         IPharmacy<Access> daoAcc = new AccessDAO();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -91,16 +104,16 @@ public class UsersController implements Serializable {
         sdf = new SimpleDateFormat("HH:mm:ss");
         access.setHora(sdf.parse(sdf.format(fec)));
         access.setUserId(u);
-        
+
         daoAcc.Create(access);
     }
-    
+
     private boolean findStartWork() {
         IPharmacy<StartWork> dao = new StartWorkDAO();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date fechaAct = new Date();
         boolean result = false;
-        
+
         try {
             String query = "SELECT o FROM StartWork o WHERE o.fecha = '" + sdf.format(fechaAct) + "' AND o.capital > 0";
             StartWork ow = dao.findBy(query);
@@ -112,21 +125,25 @@ public class UsersController implements Serializable {
         }
         return result;
     }
-    
+
+    public void doChangeState() {
+        active = false;
+    }
+
     public String doCreate(Users u) {
         FacesMessage msg = null;
         IPharmacy<StartWork> dao = new StartWorkDAO();
         String ruta = "";
-        
+
         try {
-            
+
             IPharmacy<Users> daoUs = new UsersDAO();
             String query = "SELECT u FROM Users u WHERE u.username = '" + u.getUsername() + "' AND u.password = '" + u.getPassword() + "'";
             Users us = daoUs.findBy(query);
-            
+
             getStartWork().setUserId(us);
             boolean result = dao.Create(startWork);
-            
+
             if (result) {
                 msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.SAVE_SUCCESS);
                 ruta = "sale?faces-redirect=true";
@@ -138,43 +155,51 @@ public class UsersController implements Serializable {
             msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, MessagesUtil.ERROR_TITLE,
                     e.getMessage());
         }
-        
+
         FacesContext.getCurrentInstance().addMessage(null, msg);
         return ruta;
     }
-    
+
     private void showWellcomeMsge() {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "ACCESO CONCEDIDO", "Bienvenido " + getUsuario().getUsername().toUpperCase());
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void cerrarSesion() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
-    
+
     public List<Users> getUsuarios() {
         return usuarios;
     }
-    
+
     public void setUsuarios(List<Users> usuarios) {
         this.usuarios = usuarios;
     }
-    
+
     public Users getUsuario() {
         return usuario;
     }
-    
+
     public void setUsuario(Users usuario) {
         this.usuario = usuario;
     }
-    
+
     public StartWork getStartWork() {
         return startWork;
     }
-    
+
     public void setStartWork(StartWork startWork) {
         this.startWork = startWork;
     }
-    
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
 }
