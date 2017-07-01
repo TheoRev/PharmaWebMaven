@@ -29,11 +29,13 @@
                                                  oncomplete="PF('dlgStockCU').show()" icon="fa fa-plus"
                                                  title="Añadir" action="#{stockController.doNew()}" />
                                 
+                                 <!--
                                  <p:commandButton value="Ingreso de Productos"
                                              style="float: left; font-size: 10pt;"
                                              icon="fa fa-product-hunt"
                                              update=":frmIngProd:pnlIngProd"
                                              oncomplete="PF('dlgIngProd').show()"/>
+                                 -->
                             </f:facet>
 
                             <p:column headerText="Código" styleClass="cod_col"
@@ -41,11 +43,12 @@
                                       style="#{stockController.colorearFila(sp.cantidad)}">
                                 <h:outputText value="#{sp.codStock}" />
                             </p:column>
-                            <p:column headerText="Nombre" filterBy="#{sp.nombre}"
+                            <p:column headerText="Nombre" filterBy="#{sp.nombre}" sortBy="#{sp.nombre}"
                                       style="#{stockController.colorearFila(sp.cantidad)}">
                                 <h:outputText value="#{sp.nombre}" />
                             </p:column>
-                            <p:column headerText="Presentación"
+                            <p:column headerText="Presentación" filterBy="#{sp.presentacion}"
+                                      sortBy="#{sp.presentacion}"
                                       style="#{stockController.colorearFila(sp.cantidad)}">
                                 <h:outputText value="#{sp.presentacion}" />
                             </p:column>
@@ -53,7 +56,7 @@
                                       style="#{stockController.colorearFila(sp.cantidad)}">
                                 <h:outputText value="#{sp.codLab.nomLab}" />
                             </p:column>
-                            <p:column headerText="Lote"
+                            <p:column headerText="Lote" filterBy="#{sp.lote}"
                                       style="#{stockController.colorearFila(sp.cantidad)}">
                                 <h:outputText value="#{sp.lote}" />
                             </p:column>

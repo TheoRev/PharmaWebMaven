@@ -71,10 +71,10 @@
                             <p:column headerText="Descripción">
                                 <h:outputText value="#{p.descripcion}"/>
                             </p:column>
-                            <p:column headerText="Usuario">
+                            <p:column headerText="Usuario" filterBy="#{p.userId.username}">
                                 <h:outputText value="#{p.userId.username}" />
                             </p:column>
-                            <p:column headerText="Producto">
+                            <p:column headerText="Producto" filterBy="#{p.codStock.nombre}">
                                 <h:outputText value="#{p.codStock.nombre}"/>
                             </p:column>
                             <p:column headerText="">
