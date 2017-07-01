@@ -81,7 +81,8 @@
                                       sortBy="#{sp.codSale}">
                                 <h:outputText value="#{sp.codSale}" />
                             </p:column>
-                            <p:column headerText="Producto" sortBy="#{sp.codStock.nombre}">
+                            <p:column headerText="Producto" sortBy="#{sp.codStock.nombre}"
+                                      filterBy="#{sp.codStock.nombre}">
                                 <h:outputText value="#{sp.codStock.nombre}" />
                             </p:column>
                             <p:column headerText="Fecha" sortBy="#{sp.fecha}">
@@ -108,7 +109,8 @@
                                     <f:convertNumber currencySymbol="S/." type="currency" />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Usuario">
+                            <p:column headerText="Usuario" sortBy="#{sp.userId.username}"
+                                      filterBy="#{sp.userId.username}">
                                 <h:outputText value="#{sp.userId.username}"/>
                             </p:column>
                             <p:column headerText="" exportable="false">
