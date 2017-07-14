@@ -88,7 +88,7 @@
 				</staticText>
 				<image hAlign="Center">
 					<reportElement x="423" y="10" width="149" height="71" uuid="e9bcf148-dffb-4032-97e7-82f446dd8d67"/>
-					<imageExpression><![CDATA["D:\\Docs\\NetBeansProjects\\PharmaWebMaven\\src\\main\\webapp\\resources\\images\\Farma_Sur_small.png"]]></imageExpression>
+					<imageExpression><![CDATA["C:\\Servers\\images\\Farma_Sur_small.png"]]></imageExpression>
 				</image>
 			</frame>
 		</band>

@@ -60,8 +60,12 @@ public class UsersController implements Serializable {
         IPharmacy<Users> dao = new UsersDAO();
 
         try {
-            Users u = dao.findBy(query);
-            if (u != null) {
+            List<Users> userses = dao.findByQuery(query);
+            if (userses != null && userses.size() == 1) {
+                Users u = new Users();
+                for (Users us : userses) {
+                    u = us;
+                }
                 if (u.getUsername().equals(usuario.getUsername())
                         && u.getPassword().equals(usuario.getPassword())) {
 

@@ -231,9 +231,9 @@ public class SaleController implements Serializable {
                     if (result && resultST) {
                         sales.add(sales.size(), sale);
                         doFindAll();
-                        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Datos guardados correctamente");
+                        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.SAVE_SUCCESS);
                     } else {
-                        msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", "El proceso no se ejecutó");
+                        msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.FAIL_TITLE, MessagesUtil.SAVE_FAIL);
                     }
                 } else {
                     msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Stock insuficiante",
@@ -242,7 +242,7 @@ public class SaleController implements Serializable {
                 }
             }
         } catch (Exception e) {
-            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "FATAL ERROR", e.getMessage());
+            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, MessagesUtil.ERROR_TITLE, e.getMessage());
         }
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -293,9 +293,9 @@ public class SaleController implements Serializable {
                         sales.clear();
                         doFindAll();
                         sale = new Sale();
-                        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Datos actualizados correctamente");
+                        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.SAVE_SUCCESS);
                     } else {
-                        msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", "El proceso no se ejecutó");
+                        msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.FAIL_TITLE, MessagesUtil.UPDATE_FAIL);
                     }
                 } else {
                     msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Stock insuficiante",
@@ -306,7 +306,7 @@ public class SaleController implements Serializable {
             }
 
         } catch (Exception e) {
-            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "FATAL ERROR", e.getMessage());
+            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, MessagesUtil.ERROR_TITLE, e.getMessage());
         }
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -343,10 +343,8 @@ public class SaleController implements Serializable {
 
             resultST = daoSt.Update(producto);
 
-            if (resultST) {
-                msg = null;
-            } else {
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", "NO se pudo reponer el Stock");
+            if (!resultST) {
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.ERROR_TITLE, "No se pudo reponer el Stock");
             }
 
             result = dao.Delete(s);
@@ -355,12 +353,12 @@ public class SaleController implements Serializable {
                 sales.clear();
                 doFindAll();
                 sale = new Sale();
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Se eliminó correctamente");
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.DELETE_SUCCESS);
             } else {
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", "El proceso no se ejecutó");
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.FAIL_TITLE, MessagesUtil.DELETE_FAIL);
             }
         } catch (Exception e) {
-            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "FATAL ERROR", e.getMessage());
+            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, MessagesUtil.ERROR_TITLE, e.getMessage());
         }
 
         FacesContext.getCurrentInstance().addMessage(null, msg);

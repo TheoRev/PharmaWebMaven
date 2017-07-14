@@ -4,7 +4,6 @@ import com.hrevfdz.dao.PaymentsDAO;
 import com.hrevfdz.dao.SaleDAO;
 import com.hrevfdz.dao.StartWorkDAO;
 import com.hrevfdz.dao.UsersDAO;
-import com.hrevfdz.models.Payments;
 import com.hrevfdz.models.StartWork;
 import com.hrevfdz.models.Users;
 import com.hrevfdz.services.IPharmacy;
@@ -136,7 +135,7 @@ public class StartWorkController implements Serializable {
 
             startWorks = dao.findByQuery(query);
         } catch (Exception ex) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN DB", ex.getMessage());
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.ERROR_TITLE, ex.getMessage());
         }
 
         if (message != null) {
@@ -154,7 +153,7 @@ public class StartWorkController implements Serializable {
 
             startWorks = dao.findByQuery(query);
         } catch (Exception ex) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN DB", ex.getMessage());
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.ERROR_TITLE, ex.getMessage());
         }
 
         if (message != null) {

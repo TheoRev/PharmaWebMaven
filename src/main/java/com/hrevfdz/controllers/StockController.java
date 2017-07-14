@@ -8,6 +8,7 @@ import com.hrevfdz.models.Laboratory;
 import com.hrevfdz.models.StockProducto;
 import com.hrevfdz.services.IPharmacy;
 import com.hrevfdz.util.AccionUtil;
+import com.hrevfdz.util.MessagesUtil;
 import com.hrevfdz.util.QueriesUtil;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -83,12 +84,12 @@ public class StockController extends IngresoProdController implements Serializab
                 boolean result2 = idao.Create(ingresoProducto);
                 stockProducto = new StockProducto();
 
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Datos guardado correctamente");
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.SAVE_SUCCESS);
             } else {
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", "El proceso no se ejecutó");
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.FAIL_TITLE, MessagesUtil.SAVE_FAIL);
             }
         } catch (Exception e) {
-            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "FATAL ERROR", e.getMessage());
+            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, MessagesUtil.ERROR_TITLE, e.getMessage());
         }
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -111,15 +112,15 @@ public class StockController extends IngresoProdController implements Serializab
                 boolean result2 = idao.Create(ingresoProducto);
                 doFindAllIngreso();
                 if (result2) {
-                    msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Se modificó correctamente");
+                    msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.SAVE_SUCCESS);
                 } else {
-                    msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "No se registro correctamente el ingreso del producto");
+                    msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.FAIL_TITLE, MessagesUtil.SAVE_FAIL);
                 }
             } else {
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", "El proceso no se ejecutó");
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.FAIL_TITLE, MessagesUtil.SAVE_FAIL);
             }
         } catch (Exception e) {
-            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "FATAL ERROR", e.getMessage());
+            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, MessagesUtil.ERROR_TITLE, e.getMessage());
         }
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -135,12 +136,12 @@ public class StockController extends IngresoProdController implements Serializab
             if (result) {
                 stockProductos.clear();
                 doFindAll();
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Se eliminó correctamente");
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.SAVE_SUCCESS);
             } else {
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", "El proceso no se ejecutó");
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.FAIL_TITLE, MessagesUtil.SAVE_FAIL);
             }
         } catch (Exception e) {
-            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "FATAL ERROR", e.getMessage());
+            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, MessagesUtil.ERROR_TITLE, e.getMessage());
         }
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -153,7 +154,7 @@ public class StockController extends IngresoProdController implements Serializab
         try {
             labs = dao.findByQuery(QueriesUtil.STOCK_X_LABORATORY);
         } catch (Exception e) {
-            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, "FATAL ERROR", e.getMessage());
+            msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, MessagesUtil.ERROR_TITLE, e.getMessage());
         }
 
         if (msg != null) {

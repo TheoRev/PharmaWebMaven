@@ -4,6 +4,7 @@ import com.hrevfdz.dao.IngresoProductoDAO;
 import com.hrevfdz.models.IngresoProducto;
 import com.hrevfdz.models.StockProducto;
 import com.hrevfdz.services.IPharmacy;
+import com.hrevfdz.util.MessagesUtil;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,7 +43,7 @@ public class IngresoProdController implements Serializable {
             final String query = "SELECT i FROM IngresoProducto i WHERE i.fecha <= '" + sdf.format(fec) + "'";
             ingresoProductos = dao.findByQuery(query);
         } catch (Exception ex) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN DB", ex.getMessage());
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.ERROR_TITLE, ex.getMessage());
         }
 
         if (message != null) {
@@ -66,7 +67,7 @@ public class IngresoProdController implements Serializable {
             }
             ingresoProductos = dao.findByQuery(query);
         } catch (Exception ex) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR EN DB", ex.getMessage());
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.ERROR_TITLE, ex.getMessage());
         }
 
         if (message != null) {

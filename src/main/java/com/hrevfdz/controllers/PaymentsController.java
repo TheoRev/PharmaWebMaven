@@ -115,9 +115,9 @@ public class PaymentsController implements Serializable {
                 paymentses.clear();
                 doFindAll();
                 payments = new Payments();
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.UPDATE_SUCCESS);
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.DELETE_SUCCESS);
             } else {
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.FAIL_TITLE, MessagesUtil.UPDATE_FAIL);
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.FAIL_TITLE, MessagesUtil.DELETE_FAIL);
             }
         } catch (Exception e) {
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.ERROR_TITLE, e.getMessage());
