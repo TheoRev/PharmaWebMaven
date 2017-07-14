@@ -58,7 +58,7 @@ public class SuppliersController implements Serializable {
                 msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.FAIL_TITLE, MessagesUtil.SAVE_FAIL);
             }
         } catch (Exception e) {
-            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.ERROR_TITLE, e.getMessage());
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.ERROR_TITLE, MessagesUtil.ERROR + ": " + e.getMessage());
         }
 
         FacesContext.getCurrentInstance().addMessage(null, msg);

@@ -57,7 +57,7 @@ public class LaboratoryController implements Serializable {
             if (result) {
                 laboratorios.add(laboratorios.size(), laboratorio);
                 laboratorio = new Laboratory();
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.DELETE_SUCCESS);
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, MessagesUtil.SUCCESS_TITLE, MessagesUtil.SAVE_SUCCESS);
             } else {
                 msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, MessagesUtil.ERROR_TITLE, MessagesUtil.ERROR);
             }
