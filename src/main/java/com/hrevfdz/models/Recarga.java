@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -28,14 +29,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author theo
  */
 @Entity
-@Table(name = "access", catalog = "farmasur", schema = "pharmacy")
+@Table(name = "recarga", catalog = "farmasur", schema = "pharmacy")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Access.findAll", query = "SELECT a FROM Access a")
-    , @NamedQuery(name = "Access.findById", query = "SELECT a FROM Access a WHERE a.id = :id")
-    , @NamedQuery(name = "Access.findByFecha", query = "SELECT a FROM Access a WHERE a.fecha = :fecha")
-    , @NamedQuery(name = "Access.findByHora", query = "SELECT a FROM Access a WHERE a.hora = :hora")})
-public class Access implements Serializable {
+    @NamedQuery(name = "Recarga.findAll", query = "SELECT r FROM Recarga r")
+    , @NamedQuery(name = "Recarga.findById", query = "SELECT r FROM Recarga r WHERE r.id = :id")
+    , @NamedQuery(name = "Recarga.findByFecha", query = "SELECT r FROM Recarga r WHERE r.fecha = :fecha")
+    , @NamedQuery(name = "Recarga.findByOperador", query = "SELECT r FROM Recarga r WHERE r.operador = :operador")
+    , @NamedQuery(name = "Recarga.findByNumero", query = "SELECT r FROM Recarga r WHERE r.numero = :numero")
+    , @NamedQuery(name = "Recarga.findByMonto", query = "SELECT r FROM Recarga r WHERE r.monto = :monto")})
+public class Recarga implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,26 +51,29 @@ public class Access implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "hora")
-    @Temporal(TemporalType.TIME)
-    private Date hora;
+    @Size(max = 15)
+    @Column(name = "operador")
+    private String operador;
+    @Size(max = 15)
+    @Column(name = "numero")
+    private String numero;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "monto")
+    private Double monto;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private Users userId;
 
-    public Access() {
+    public Recarga() {
     }
 
-    public Access(Integer id) {
+    public Recarga(Integer id) {
         this.id = id;
     }
 
-    public Access(Integer id, Date fecha, Date hora) {
+    public Recarga(Integer id, Date fecha) {
         this.id = id;
         this.fecha = fecha;
-        this.hora = hora;
     }
 
     public Integer getId() {
@@ -86,12 +92,28 @@ public class Access implements Serializable {
         this.fecha = fecha;
     }
 
-    public Date getHora() {
-        return hora;
+    public String getOperador() {
+        return operador;
     }
 
-    public void setHora(Date hora) {
-        this.hora = hora;
+    public void setOperador(String operador) {
+        this.operador = operador;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public Double getMonto() {
+        return monto;
+    }
+
+    public void setMonto(Double monto) {
+        this.monto = monto;
     }
 
     public Users getUserId() {
@@ -112,10 +134,10 @@ public class Access implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Access)) {
+        if (!(object instanceof Recarga)) {
             return false;
         }
-        Access other = (Access) object;
+        Recarga other = (Recarga) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -124,7 +146,7 @@ public class Access implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hrevfdz.models.Access[ id=" + id + " ]";
+        return "com.hrevfdz.models.Recarga[ id=" + id + " ]";
     }
     
 }

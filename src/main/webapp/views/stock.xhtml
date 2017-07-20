@@ -70,6 +70,11 @@
                                       style="#{stockController.colorearFila(sp.cantidad)}">
                                 <h:outputText value="#{sp.cantidad}" />
                             </p:column>
+                            <p:column headerText="Fec. Venc" sortBy="#{sp.fecVen}">
+                                <h:outputText value="#{sp.fecVen}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
                             <p:column headerText=""
                                       style="#{stockController.colorearFila(sp.cantidad)}">
                                 <div id="actions-stock">
@@ -129,6 +134,10 @@
                             </p:selectOneMenu>
                             <p:commandButton icon="fa fa-flask" title="Gestionar Laboratorio"
                                              update=":frmLabsR:pnlLabR" oncomplete="PF('dlgLabR').show()" />
+                            <p:outputLabel value="Fec. Vencimiento"/>
+                            <p:calendar value="#{stockController.stockProducto.fecVen}" navigator="true"
+                                        pattern="dd/MM/yyyy" effect="fold" locale="es"
+                                        showOn="button"/>
                             <p:outputLabel value="Lote" />
                             <p:inputText id="lote"
                                          value="#{stockController.stockProducto.lote}" />

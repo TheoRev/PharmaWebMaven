@@ -4,17 +4,19 @@ import com.hrevfdz.models.IngresoProducto;
 import com.hrevfdz.models.Laboratory;
 import com.hrevfdz.models.Payments;
 import com.hrevfdz.models.Sale;
+import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-07-14T18:20:59")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-07-19T22:19:43")
 @StaticMetamodel(StockProducto.class)
 public class StockProducto_ { 
 
-    public static volatile SingularAttribute<StockProducto, Double> monto;
+    public static volatile SingularAttribute<StockProducto, Date> fecVen;
     public static volatile ListAttribute<StockProducto, Payments> paymentsList;
+    public static volatile SingularAttribute<StockProducto, Double> monto;
     public static volatile SingularAttribute<StockProducto, Double> costo;
     public static volatile SingularAttribute<StockProducto, String> lote;
     public static volatile ListAttribute<StockProducto, Sale> saleList;

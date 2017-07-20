@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author lheo2
+ * @author theo
  */
 @Entity
 @Table(name = "sale", catalog = "farmasur", schema = "pharmacy")

@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author lheo2
+ * @author theo
  */
 @Entity
 @Table(name = "suppliers", catalog = "farmasur", schema = "pharmacy")
@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Suppliers.findByNombre", query = "SELECT s FROM Suppliers s WHERE s.nombre = :nombre")
     , @NamedQuery(name = "Suppliers.findByEncargado", query = "SELECT s FROM Suppliers s WHERE s.encargado = :encargado")
     , @NamedQuery(name = "Suppliers.findByTelefono", query = "SELECT s FROM Suppliers s WHERE s.telefono = :telefono")
-    , @NamedQuery(name = "Suppliers.findByEmail", query = "SELECT s FROM Suppliers s WHERE s.email = :email")})
+    , @NamedQuery(name = "Suppliers.findByEmail", query = "SELECT s FROM Suppliers s WHERE s.email = :email")
+    , @NamedQuery(name = "Suppliers.findByRuc", query = "SELECT s FROM Suppliers s WHERE s.ruc = :ruc")})
 public class Suppliers implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,6 +60,9 @@ public class Suppliers implements Serializable {
     @Size(max = 150)
     @Column(name = "email")
     private String email;
+    @Size(max = 11)
+    @Column(name = "ruc")
+    private String ruc;
     @OneToMany(mappedBy = "codSupplier")
     private List<Laboratory> laboratoryList;
 
@@ -112,6 +116,14 @@ public class Suppliers implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRuc() {
+        return ruc;
+    }
+
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
     }
 
     @XmlTransient
